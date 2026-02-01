@@ -261,7 +261,7 @@ export function HomePage() {
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <a
-                href="https://github.com/oshitalkjp/blockyclaw"
+                href="https://github.com/Blockyclaw/blockyclaw"
                 target="_blank"
                 className="px-8 py-4 bg-white text-black font-semibold rounded-lg hover:bg-gray-100 transition border border-gray-300"
               >

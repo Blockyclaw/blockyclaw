@@ -254,6 +254,299 @@ serve(async (req) => {
       return jsonResponse({ transactions });
     }
 
+    // =====================
+    // MARKETPLACE ITEMS API
+    // =====================
+
+    // GET /items - Search marketplace items (all types)
+    if (req.method === "GET" && path === "/items") {
+      const type = url.searchParams.get("type"); // skill, api, model, etc.
+      const search = url.searchParams.get("search");
+      const limit = parseInt(url.searchParams.get("limit") || "20");
+
+      let query = supabaseAdmin
+        .from("marketplace_items")
+        .select("id, type, title, slug, description, price_cents, rating_avg, rating_count, download_count, tags, is_verified")
+        .eq("is_published", true)
+        .order("rating_avg", { ascending: false })
+        .limit(limit);
+
+      if (type) {
+        query = query.eq("type", type);
+      }
+
+      if (search) {
+        query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+      }
+
+      const { data: items, error } = await query;
+
+      if (error) {
+        return jsonResponse({ error: error.message }, 500);
+      }
+
+      return jsonResponse({
+        items: items.map(item => ({
+          ...item,
+          price_usd: (item.price_cents / 100).toFixed(2),
+          can_afford: agent.balance >= item.price_cents,
+        })),
+        total: items.length,
+      });
+    }
+
+    // GET /items/:id - Get item detail
+    if (req.method === "GET" && path.match(/^\/items\/[^/]+$/) && !path.includes("/content")) {
+      const itemId = path.replace("/items/", "");
+
+      const { data: item, error } = await supabaseAdmin
+        .from("marketplace_items")
+        .select("*")
+        .eq("id", itemId)
+        .eq("is_published", true)
+        .single();
+
+      if (error || !item) {
+        return jsonResponse({ error: "Item not found" }, 404);
+      }
+
+      // Check if already owned
+      const { data: ownership } = await supabaseAdmin
+        .from("item_ownership")
+        .select("id")
+        .eq("agent_id", agent.id)
+        .eq("item_id", itemId)
+        .single();
+
+      return jsonResponse({
+        ...item,
+        price_usd: (item.price_cents / 100).toFixed(2),
+        can_afford: agent.balance >= item.price_cents,
+        already_owned: !!ownership,
+      });
+    }
+
+    // POST /items/purchase - Purchase a marketplace item
+    if (req.method === "POST" && path === "/items/purchase") {
+      if (!agent.auto_purchase_enabled) {
+        return jsonResponse({ error: "Auto-purchase is disabled for this agent" }, 403);
+      }
+
+      const body = await req.json();
+      const { item_id, reason } = body;
+
+      if (!item_id) {
+        return jsonResponse({ error: "item_id is required" }, 400);
+      }
+
+      // Get item
+      const { data: item, error: itemError } = await supabaseAdmin
+        .from("marketplace_items")
+        .select("*")
+        .eq("id", item_id)
+        .eq("is_published", true)
+        .single();
+
+      if (itemError || !item) {
+        return jsonResponse({ error: "Item not found" }, 404);
+      }
+
+      // Check per-purchase limit
+      if (agent.per_purchase_limit && item.price_cents > agent.per_purchase_limit) {
+        return jsonResponse({
+          error: "Exceeds per-purchase limit",
+          limit: agent.per_purchase_limit,
+          price: item.price_cents
+        }, 403);
+      }
+
+      // Check if requires approval
+      if (agent.require_approval_above && item.price_cents > agent.require_approval_above) {
+        // Create approval request
+        const { data: request, error: reqError } = await supabaseAdmin
+          .from("ai_purchase_requests")
+          .insert({
+            agent_id: agent.id,
+            skill_id: item_id, // Using skill_id field for items too
+            license_type: "personal",
+            price: item.price_cents,
+            reason: reason || `AI wants to purchase: ${item.title}`,
+          })
+          .select("id")
+          .single();
+
+        if (reqError) {
+          return jsonResponse({ error: "Failed to create approval request" }, 500);
+        }
+
+        return jsonResponse({
+          status: "approval_required",
+          request_id: request.id,
+          message: "Purchase exceeds auto-approval limit. Human will be notified.",
+        });
+      }
+
+      // Process purchase with fees
+      const { data: result, error: purchaseError } = await supabaseAdmin
+        .rpc("process_marketplace_purchase", {
+          p_buyer_agent_id: agent.id,
+          p_item_id: item_id,
+        });
+
+      if (purchaseError) {
+        return jsonResponse({ error: purchaseError.message }, 500);
+      }
+
+      return jsonResponse(result);
+    }
+
+    // GET /items/owned - List owned items
+    if (req.method === "GET" && path === "/items/owned") {
+      const { data: owned, error } = await supabaseAdmin
+        .from("item_ownership")
+        .select(`
+          id,
+          item_id,
+          purchase_price_cents,
+          purchased_at,
+          use_count,
+          item:marketplace_items(id, type, title, slug, version, content_md, api_endpoint)
+        `)
+        .eq("agent_id", agent.id)
+        .order("purchased_at", { ascending: false });
+
+      if (error) {
+        return jsonResponse({ error: error.message }, 500);
+      }
+
+      return jsonResponse({ items: owned });
+    }
+
+    // GET /items/owned/:id/content - Get item content
+    if (req.method === "GET" && path.match(/^\/items\/owned\/[^/]+\/content$/)) {
+      const itemId = path.split("/")[3];
+
+      const { data: ownership, error } = await supabaseAdmin
+        .from("item_ownership")
+        .select(`
+          use_count,
+          item:marketplace_items(content_md, api_endpoint, content_url, model_url)
+        `)
+        .eq("agent_id", agent.id)
+        .eq("item_id", itemId)
+        .single();
+
+      if (error || !ownership) {
+        return jsonResponse({ error: "Item not owned" }, 404);
+      }
+
+      // Increment use count
+      await supabaseAdmin
+        .from("item_ownership")
+        .update({
+          use_count: ownership.use_count + 1,
+          last_used_at: new Date().toISOString(),
+        })
+        .eq("agent_id", agent.id)
+        .eq("item_id", itemId);
+
+      return jsonResponse({
+        content_md: ownership.item.content_md,
+        api_endpoint: ownership.item.api_endpoint,
+        content_url: ownership.item.content_url,
+        model_url: ownership.item.model_url,
+      });
+    }
+
+    // =====================
+    // SELLER API (AI can sell too!)
+    // =====================
+
+    // POST /sell - List an item for sale
+    if (req.method === "POST" && path === "/sell") {
+      const body = await req.json();
+      const { type, title, description, price_cents, content_md, api_endpoint, tags } = body;
+
+      if (!type || !title || !description || !price_cents) {
+        return jsonResponse({
+          error: "Required: type, title, description, price_cents"
+        }, 400);
+      }
+
+      const validTypes = ["skill", "api", "model", "lora", "prompt", "data", "compute", "agent_hire"];
+      if (!validTypes.includes(type)) {
+        return jsonResponse({ error: `Invalid type. Must be one of: ${validTypes.join(", ")}` }, 400);
+      }
+
+      // Generate slug
+      const slug = title.toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "") + "-" + Date.now().toString(36);
+
+      const { data: item, error } = await supabaseAdmin
+        .from("marketplace_items")
+        .insert({
+          seller_id: agent.owner_id,
+          seller_agent_id: agent.id,
+          type,
+          title,
+          slug,
+          description,
+          price_cents,
+          content_md: content_md || null,
+          api_endpoint: api_endpoint || null,
+          tags: tags || [],
+          is_published: true, // AI-listed items go live immediately (moderated by AI later)
+        })
+        .select("id, slug")
+        .single();
+
+      if (error) {
+        return jsonResponse({ error: error.message }, 500);
+      }
+
+      return jsonResponse({
+        status: "success",
+        item_id: item.id,
+        slug: item.slug,
+        message: "Item listed successfully",
+      });
+    }
+
+    // GET /sell/my-items - List items I'm selling
+    if (req.method === "GET" && path === "/sell/my-items") {
+      const { data: items, error } = await supabaseAdmin
+        .from("marketplace_items")
+        .select("id, type, title, slug, price_cents, download_count, rating_avg, is_published, created_at")
+        .eq("seller_agent_id", agent.id)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        return jsonResponse({ error: error.message }, 500);
+      }
+
+      return jsonResponse({ items });
+    }
+
+    // =====================
+    // APPROVAL REQUESTS
+    // =====================
+
+    // GET /requests - List my pending approval requests
+    if (req.method === "GET" && path === "/requests") {
+      const { data: requests, error } = await supabaseAdmin
+        .from("ai_purchase_requests")
+        .select("id, skill_id, price, reason, status, created_at, expires_at")
+        .eq("agent_id", agent.id)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        return jsonResponse({ error: error.message }, 500);
+      }
+
+      return jsonResponse({ requests });
+    }
+
     return jsonResponse({ error: "Not found" }, 404);
 
   } catch (error) {

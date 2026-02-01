@@ -18,7 +18,7 @@ export function Footer() {
             </p>
             <div className="flex gap-4 mt-4">
               <a
-                href="https://github.com/oshitalkjp/blockyclaw"
+                href="https://github.com/Blockyclaw/blockyclaw"
                 target="_blank"
                 className="text-gray-500 hover:text-black transition"
               >
@@ -60,7 +60,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://github.com/oshitalkjp/blockyclaw"
+                  href="https://github.com/Blockyclaw/blockyclaw"
                   target="_blank"
                   className="text-gray-500 hover:text-black transition"
                 >

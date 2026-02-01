@@ -43,9 +43,33 @@ serve(async (req) => {
         const session = event.data.object as Stripe.Checkout.Session;
 
         if (session.payment_status === "paid") {
-          const { skill_id, buyer_id, license_type } = session.metadata || {};
+          const metadata = session.metadata || {};
 
-          if (skill_id && buyer_id) {
+          // Handle wallet funding
+          if (metadata.type === "wallet_fund") {
+            const { agent_id, net_amount } = metadata;
+            const netAmountCents = parseInt(net_amount);
+
+            if (agent_id && netAmountCents) {
+              // Process deposit with calculated net amount
+              const { data: result, error } = await supabaseAdmin.rpc("process_deposit", {
+                p_agent_id: agent_id,
+                p_amount_cents: parseInt(metadata.gross_amount), // Pass gross, function calculates fee
+                p_payment_method: "stripe",
+              });
+
+              if (error) {
+                console.error("Failed to process wallet deposit:", error);
+                throw error;
+              }
+
+              console.log(`Wallet funded for agent ${agent_id}: +$${(netAmountCents / 100).toFixed(2)}`);
+            }
+          }
+          // Handle skill purchase
+          else if (metadata.skill_id && metadata.buyer_id) {
+            const { skill_id, buyer_id, license_type } = metadata;
+
             // Record the purchase
             const { error } = await supabaseAdmin.from("purchases").insert({
               buyer_id,
