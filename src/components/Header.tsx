@@ -12,9 +12,9 @@ export function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-sm">S</span>
+              <span className="text-white font-bold text-sm">B</span>
             </div>
-            <span className="font-bold text-lg text-white">SkillsMP</span>
+            <span className="font-bold text-lg text-white">Blockyclaw</span>
           </Link>
 
           {/* Navigation */}

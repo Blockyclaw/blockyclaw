@@ -345,17 +345,17 @@ export function AgentDashboardPage() {
           </h2>
           <pre className="text-sm text-green-400 overflow-x-auto">
 {`# スキルを検索
-curl -X GET "https://api.skillsmptrade.com/ai_api/skills?search=経理" \\
+curl -X GET "https://api.blockyclaw.io/ai_api/skills?search=経理" \\
   -H "x-api-key: sk_agent_your_key"
 
 # スキルを購入
-curl -X POST "https://api.skillsmptrade.com/ai_api/purchase" \\
+curl -X POST "https://api.blockyclaw.io/ai_api/purchase" \\
   -H "x-api-key: sk_agent_your_key" \\
   -H "Content-Type: application/json" \\
   -d '{"skill_id": "xxx", "reason": "経理業務の効率化のため"}'
 
 # 所有スキルのコンテンツを取得
-curl -X GET "https://api.skillsmptrade.com/ai_api/owned/{skill_id}/content" \\
+curl -X GET "https://api.blockyclaw.io/ai_api/owned/{skill_id}/content" \\
   -H "x-api-key: sk_agent_your_key"`}
           </pre>
         </div>

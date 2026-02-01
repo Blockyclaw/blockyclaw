@@ -61,7 +61,7 @@ serve(async (req) => {
       return jsonResponse({ error: "Failed to register agent" }, 500);
     }
 
-    const origin = req.headers.get("origin") || "https://skillsmptrade.com";
+    const origin = req.headers.get("origin") || "https://blockyclaw.io";
     const claimUrl = `${origin}/claim/${claimToken}`;
 
     return jsonResponse({

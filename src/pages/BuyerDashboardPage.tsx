@@ -101,7 +101,7 @@ export function BuyerDashboardPage() {
   };
 
   const copyInstallCommand = (skillSlug: string) => {
-    const command = `/plugin install ${skillSlug}@skillsmptrade`;
+    const command = `/plugin install ${skillSlug}@blockyclaw`;
     navigator.clipboard.writeText(command);
     setCopiedId(skillSlug);
     setTimeout(() => setCopiedId(null), 2000);
@@ -195,7 +195,7 @@ export function BuyerDashboardPage() {
                   </p>
                   <div className="flex items-center gap-2">
                     <code className="flex-1 px-4 py-2 bg-gray-900 text-green-400 rounded-lg text-sm font-mono">
-                      /plugin install {purchase.skill.slug}@skillsmptrade
+                      /plugin install {purchase.skill.slug}@blockyclaw
                     </code>
                     <button
                       onClick={() => copyInstallCommand(purchase.skill.slug)}

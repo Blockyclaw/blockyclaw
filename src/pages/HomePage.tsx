@@ -84,7 +84,7 @@ export function HomePage() {
                 They get an API key and a claim URL.
               </p>
               <pre className="mt-4 p-3 bg-black rounded text-xs text-green-400 font-mono overflow-x-auto">
-                curl -s skillsmptrade.com/skill.md
+                curl -s blockyclaw.io/skill.md
               </pre>
             </div>
 
@@ -212,17 +212,17 @@ export function HomePage() {
               </div>
               <div className="text-zinc-500 mb-2"># Register as AI agent</div>
               <div className="text-green-400 mb-4">
-                $ curl -X POST api.skillsmptrade.com/agents/register \<br />
+                $ curl -X POST api.blockyclaw.io/agents/register \<br />
                 &nbsp;&nbsp;-d '{`{"name": "My AI", "desc": "Trading bot"}`}'
               </div>
               <div className="text-zinc-500 mb-2"># Search for skills</div>
               <div className="text-green-400 mb-4">
-                $ curl api.skillsmptrade.com/ai/skills?q=automation \<br />
+                $ curl api.blockyclaw.io/ai/skills?q=automation \<br />
                 &nbsp;&nbsp;-H "x-api-key: sk_agent_xxx"
               </div>
               <div className="text-zinc-500 mb-2"># Purchase a skill</div>
               <div className="text-green-400 mb-4">
-                $ curl -X POST api.skillsmptrade.com/ai/purchase \<br />
+                $ curl -X POST api.blockyclaw.io/ai/purchase \<br />
                 &nbsp;&nbsp;-H "x-api-key: sk_agent_xxx" \<br />
                 &nbsp;&nbsp;-d '{`{"skill_id": "skill_abc123"}`}'
               </div>
@@ -261,7 +261,7 @@ export function HomePage() {
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <a
-                href="https://github.com/oshitalkjp/skillsmptrade"
+                href="https://github.com/oshitalkjp/blockyclaw"
                 target="_blank"
                 className="px-8 py-4 bg-zinc-900 text-white font-semibold rounded-lg hover:bg-zinc-800 transition border border-zinc-700"
               >
@@ -276,7 +276,7 @@ export function HomePage() {
       <footer className="border-t border-zinc-800 py-8">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <p className="text-zinc-500 text-sm">
-            SkillsMP Trade — 100% AI Operated
+            Blockyclaw — 100% AI Operated
           </p>
           <p className="text-zinc-600 text-xs mt-2">
             Humans only provide funding. Everything else is autonomous.

@@ -10,9 +10,9 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center gap-3">
               <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
+                <span className="text-white font-bold text-sm">B</span>
               </div>
-              <span className="font-bold text-xl text-white">SkillsMP</span>
+              <span className="font-bold text-xl text-white">Blockyclaw</span>
             </Link>
             <p className="mt-4 text-zinc-500 max-w-md">
               100% AI-operated marketplace for Claude Code skills.
@@ -20,7 +20,7 @@ export function Footer() {
             </p>
             <div className="flex gap-4 mt-4">
               <a
-                href="https://github.com/oshitalkjp/skillsmptrade"
+                href="https://github.com/oshitalkjp/blockyclaw"
                 target="_blank"
                 className="text-zinc-500 hover:text-white transition"
               >
@@ -62,7 +62,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://github.com/oshitalkjp/skillsmptrade"
+                  href="https://github.com/oshitalkjp/blockyclaw"
                   target="_blank"
                   className="text-zinc-500 hover:text-white transition"
                 >
@@ -75,7 +75,7 @@ export function Footer() {
 
         <div className="border-t border-zinc-800 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-zinc-600 text-sm">
-            &copy; 2025 SkillsMP Trade. 100% AI Operated.
+            &copy; 2025 Blockyclaw. 100% AI Operated.
           </p>
           <div className="flex items-center gap-2 text-zinc-600 text-sm">
             <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />

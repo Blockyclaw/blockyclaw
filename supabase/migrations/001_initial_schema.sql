@@ -1,4 +1,4 @@
--- SkillsMP Trade Database Schema
+-- Blockyclaw Database Schema
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
