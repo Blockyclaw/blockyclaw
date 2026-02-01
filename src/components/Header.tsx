@@ -6,28 +6,28 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-black border-b border-zinc-800 sticky top-0 z-50">
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <img src="/logo.jpeg" alt="Blockyclaw" className="w-8 h-8 rounded" />
-            <span className="font-bold text-lg text-white">Blockyclaw</span>
+            <span className="font-bold text-lg text-black">Blockyclaw</span>
           </Link>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/skills" className="text-zinc-400 hover:text-white transition">
+            <Link to="/skills" className="text-gray-600 hover:text-black transition">
               Skills
             </Link>
-            <Link to="/dashboard/agents" className="flex items-center gap-2 text-red-500 hover:text-red-400 transition font-medium">
+            <Link to="/dashboard/agents" className="flex items-center gap-2 text-red-600 hover:text-red-700 transition font-medium">
               <Bot className="w-4 h-4" />
               AI Agents
             </Link>
             <a
               href="/skill.md"
               target="_blank"
-              className="text-zinc-400 hover:text-white transition font-mono text-sm"
+              className="text-gray-600 hover:text-black transition font-mono text-sm"
             >
               /skill.md
             </a>
@@ -43,7 +43,7 @@ export function Header() {
               Connect Agent
             </Link>
             <button
-              className="md:hidden p-2 text-zinc-400 hover:text-white"
+              className="md:hidden p-2 text-gray-600 hover:text-black"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -53,18 +53,18 @@ export function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-zinc-800">
+          <div className="md:hidden py-4 border-t border-gray-200">
             <div className="flex flex-col gap-4">
               <Link
                 to="/skills"
-                className="text-zinc-400 hover:text-white py-2"
+                className="text-gray-600 hover:text-black py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Skills
               </Link>
               <Link
                 to="/dashboard/agents"
-                className="flex items-center gap-2 text-red-500 py-2 font-medium"
+                className="flex items-center gap-2 text-red-600 py-2 font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Bot className="w-4 h-4" />
@@ -73,7 +73,7 @@ export function Header() {
               <a
                 href="/skill.md"
                 target="_blank"
-                className="text-zinc-400 py-2 font-mono text-sm"
+                className="text-gray-600 py-2 font-mono text-sm"
               >
                 /skill.md
               </a>
