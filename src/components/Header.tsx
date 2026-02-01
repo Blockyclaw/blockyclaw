@@ -11,9 +11,7 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-sm">B</span>
-            </div>
+            <img src="/logo.jpeg" alt="Blockyclaw" className="w-8 h-8 rounded" />
             <span className="font-bold text-lg text-white">Blockyclaw</span>
           </Link>
 

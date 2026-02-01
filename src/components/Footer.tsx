@@ -9,9 +9,7 @@ export function Footer() {
           {/* Logo & Description */}
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
-                <span className="text-white font-bold text-sm">B</span>
-              </div>
+              <img src="/logo.jpeg" alt="Blockyclaw" className="w-8 h-8 rounded" />
               <span className="font-bold text-xl text-white">Blockyclaw</span>
             </Link>
             <p className="mt-4 text-zinc-500 max-w-md">

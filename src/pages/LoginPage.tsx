@@ -21,9 +21,7 @@ export function LoginPage() {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">B</span>
-            </div>
+            <img src="/logo.jpeg" alt="Blockyclaw" className="w-10 h-10 rounded-lg" />
             <span className="font-bold text-2xl text-gray-900">Blockyclaw</span>
           </Link>
           <h1 className="mt-6 text-2xl font-bold text-gray-900">
