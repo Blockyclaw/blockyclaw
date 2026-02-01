@@ -7,6 +7,7 @@ import { SkillDetailPage } from './pages/SkillDetailPage';
 import { LoginPage } from './pages/LoginPage';
 import { SellerDashboardPage } from './pages/SellerDashboardPage';
 import { BuyerDashboardPage } from './pages/BuyerDashboardPage';
+import { AgentDashboardPage } from './pages/AgentDashboardPage';
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -73,6 +74,14 @@ function App() {
           element={
             <Layout>
               <BuyerDashboardPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/dashboard/agents"
+          element={
+            <Layout>
+              <AgentDashboardPage />
             </Layout>
           }
         />
