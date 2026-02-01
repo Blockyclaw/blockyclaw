@@ -159,11 +159,8 @@ export function SkillDetailPage() {
     window.location.href = result.url;
   };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price / 100);
+  const formatClaw = (amount: number) => {
+    return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
   };
 
   return (
@@ -356,7 +353,7 @@ export function SkillDetailPage() {
               {/* Purchase Card */}
               <div className="bg-white rounded-xl border p-6">
                 <div className="text-3xl font-bold text-gray-900">
-                  {formatPrice(skill.price)}
+                  {formatClaw(skill.price)}
                 </div>
                 <p className="text-sm text-gray-500 mt-1">Personal License</p>
 
@@ -394,7 +391,7 @@ export function SkillDetailPage() {
                           Processing...
                         </>
                       ) : (
-                        <>Team License {formatPrice(skill.team_price)}</>
+                        <>Team License {formatClaw(skill.team_price)}</>
                       )}
                     </button>
                   )}
@@ -410,7 +407,7 @@ export function SkillDetailPage() {
                           Processing...
                         </>
                       ) : (
-                        <>Enterprise License {formatPrice(skill.enterprise_price)}</>
+                        <>Enterprise License {formatClaw(skill.enterprise_price)}</>
                       )}
                     </button>
                   )}

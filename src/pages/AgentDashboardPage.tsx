@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   Bot,
   Plus,
-  Wallet,
   ShoppingCart,
   Key,
   Copy,
@@ -13,6 +12,7 @@ import {
   AlertCircle,
   TrendingUp,
   Package,
+  Coins,
 } from 'lucide-react';
 
 interface AIAgent {
@@ -69,11 +69,8 @@ export function AgentDashboardPage() {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [visibleKeys, setVisibleKeys] = useState<Set<string>>(new Set());
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price / 100);
+  const formatClaw = (amount: number) => {
+    return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
   };
 
   const copyApiKey = (key: string) => {
@@ -103,7 +100,7 @@ export function AgentDashboardPage() {
               AI Agent Management
             </h1>
             <p className="text-gray-500 mt-1">
-              Assign wallets to AI agents and let them purchase skills autonomously
+              Fund AI agents with $CLAW and let them trade skills with 0% fees
             </p>
           </div>
           <button
@@ -144,7 +141,7 @@ export function AgentDashboardPage() {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-gray-900">
-                        {formatPrice(request.price)}
+                        {formatClaw(request.price)}
                       </p>
                       <div className="flex gap-2 mt-2">
                         <button className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700">
@@ -204,11 +201,11 @@ export function AgentDashboardPage() {
               <div className="p-6 grid grid-cols-3 gap-4 border-b bg-gray-50">
                 <div>
                   <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
-                    <Wallet className="w-3 h-3" />
-                    Balance
+                    <Coins className="w-3 h-3 text-red-500" />
+                    $CLAW Balance
                   </p>
                   <p className="text-lg font-bold text-red-600">
-                    {formatPrice(agent.balance)}
+                    {formatClaw(agent.balance)}
                   </p>
                 </div>
                 <div>
@@ -217,7 +214,7 @@ export function AgentDashboardPage() {
                     Total Spent
                   </p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {formatPrice(agent.lifetime_spent)}
+                    {formatClaw(agent.lifetime_spent)}
                   </p>
                 </div>
                 <div>
@@ -274,7 +271,7 @@ export function AgentDashboardPage() {
                     <span className="text-gray-500">Monthly Limit</span>
                     <span className="text-gray-900">
                       {agent.monthly_budget
-                        ? formatPrice(agent.monthly_budget)
+                        ? formatClaw(agent.monthly_budget)
                         : 'Unlimited'}
                     </span>
                   </div>
@@ -282,7 +279,7 @@ export function AgentDashboardPage() {
                     <span className="text-gray-500">Per Purchase Limit</span>
                     <span className="text-gray-900">
                       {agent.per_purchase_limit
-                        ? formatPrice(agent.per_purchase_limit)
+                        ? formatClaw(agent.per_purchase_limit)
                         : 'Unlimited'}
                     </span>
                   </div>
@@ -290,7 +287,7 @@ export function AgentDashboardPage() {
                     <span className="text-gray-500">Approval Required</span>
                     <span className="text-gray-900">
                       {agent.require_approval_above
-                        ? `Above ${formatPrice(agent.require_approval_above)}`
+                        ? `Above ${formatClaw(agent.require_approval_above)}`
                         : 'None'}
                     </span>
                   </div>
@@ -312,8 +309,8 @@ export function AgentDashboardPage() {
               {/* Actions */}
               <div className="px-6 py-4 bg-gray-50 border-t flex gap-2">
                 <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-                  <Wallet className="w-4 h-4" />
-                  Add Funds
+                  <Coins className="w-4 h-4" />
+                  Mint $CLAW
                 </button>
                 <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition">
                   <ShoppingCart className="w-4 h-4" />

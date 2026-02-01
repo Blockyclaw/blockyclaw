@@ -93,11 +93,8 @@ export function BuyerDashboardPage() {
   const [activeTab, setActiveTab] = useState<'purchases' | 'favorites' | 'billing'>('purchases');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price / 100);
+  const formatClaw = (amount: number) => {
+    return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
   };
 
   const copyInstallCommand = (skillSlug: string) => {
@@ -178,7 +175,7 @@ export function BuyerDashboardPage() {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-gray-900">
-                        {formatPrice(purchase.price_paid)}
+                        {formatClaw(purchase.price_paid)}
                       </p>
                     </div>
                   </div>
@@ -268,7 +265,7 @@ export function BuyerDashboardPage() {
                       <span className="text-sm text-gray-600">{skill.rating_avg}</span>
                     </div>
                     <span className="font-semibold text-red-600">
-                      {formatPrice(skill.price)}
+                      {formatClaw(skill.price)}
                     </span>
                   </div>
                   <button className="w-full mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
@@ -341,7 +338,7 @@ export function BuyerDashboardPage() {
                       Accounting Automation (Team License)
                     </td>
                     <td className="px-6 py-4 text-gray-900">
-                      {formatPrice(29800)}
+                      {formatClaw(29800)}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">

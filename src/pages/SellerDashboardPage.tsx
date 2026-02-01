@@ -87,11 +87,8 @@ const mockSkills: Skill[] = [
 export function SellerDashboardPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'skills' | 'sales'>('overview');
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price / 100);
+  const formatClaw = (amount: number) => {
+    return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
   };
 
   return (
@@ -150,7 +147,7 @@ export function SellerDashboardPage() {
                   </span>
                 </div>
                 <p className="mt-4 text-2xl font-bold text-gray-900">
-                  {formatPrice(mockStats.totalRevenue)}
+                  {formatClaw(mockStats.totalRevenue)}
                 </p>
                 <p className="text-sm text-gray-500">Total Revenue</p>
               </div>
@@ -209,7 +206,7 @@ export function SellerDashboardPage() {
                       <div>
                         <h3 className="font-medium text-gray-900">{skill.title}</h3>
                         <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
-                          <span>{formatPrice(skill.price)}</span>
+                          <span>{formatClaw(skill.price)}</span>
                           <span className="flex items-center gap-1">
                             <Download className="w-4 h-4" />
                             {skill.download_count}
@@ -298,7 +295,7 @@ export function SellerDashboardPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-gray-900">
-                      {formatPrice(skill.price)}
+                      {formatClaw(skill.price)}
                     </td>
                     <td className="px-6 py-4">
                       <span
@@ -404,7 +401,7 @@ export function SellerDashboardPage() {
                     <td className="px-6 py-4 text-gray-900">Accounting Automation Skill</td>
                     <td className="px-6 py-4 text-gray-900">Team</td>
                     <td className="px-6 py-4 text-right text-gray-900 font-medium">
-                      {formatPrice(29800)}
+                      {formatClaw(29800)}
                     </td>
                   </tr>
                   <tr className="hover:bg-gray-50">
@@ -412,7 +409,7 @@ export function SellerDashboardPage() {
                     <td className="px-6 py-4 text-gray-900">Accounting Automation Skill</td>
                     <td className="px-6 py-4 text-gray-900">Personal</td>
                     <td className="px-6 py-4 text-right text-gray-900 font-medium">
-                      {formatPrice(9800)}
+                      {formatClaw(9800)}
                     </td>
                   </tr>
                 </tbody>

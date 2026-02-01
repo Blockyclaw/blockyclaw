@@ -8,11 +8,8 @@ interface SkillCardProps {
 }
 
 export function SkillCard({ skill, showSeller = true }: SkillCardProps) {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price / 100);
+  const formatClaw = (amount: number) => {
+    return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
   };
 
   return (
@@ -87,7 +84,7 @@ export function SkillCard({ skill, showSeller = true }: SkillCardProps) {
             </span>
           </div>
           <span className="font-bold text-red-600">
-            {skill.price === 0 ? 'Free' : formatPrice(skill.price)}
+            {skill.price === 0 ? 'Free' : formatClaw(skill.price)}
           </span>
         </div>
 

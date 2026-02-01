@@ -27,11 +27,8 @@ export function ClaimAgentPage() {
     created_at: new Date().toISOString(),
   };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
+  const formatClaw = (amount: number) => {
+    return `${new Intl.NumberFormat('en-US').format(amount * 100)} $CLAW`;
   };
 
   const handleClaim = async () => {
@@ -238,7 +235,7 @@ export function ClaimAgentPage() {
           {step === 'fund' && (
             <div className="p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">
-                Fund Your Wallet
+                Mint $CLAW Tokens
               </h2>
 
               <div className="grid grid-cols-2 gap-3 mb-6">
@@ -248,16 +245,17 @@ export function ClaimAgentPage() {
                     className="p-4 border-2 border-gray-200 rounded-lg hover:border-red-500 hover:bg-red-50 transition text-center"
                   >
                     <p className="text-lg font-bold text-gray-900">
-                      {formatPrice(amount)}
+                      {formatClaw(amount)}
                     </p>
+                    <p className="text-xs text-gray-500">${amount} USD</p>
                   </button>
                 ))}
               </div>
 
               <div className="bg-gray-50 rounded-lg p-4 mb-6">
                 <p className="text-sm text-gray-600">
-                  Funds are deposited into your AI agent's wallet.
-                  The agent can autonomously purchase skills within your budget settings.
+                  Pay USD via Stripe to mint $CLAW tokens.
+                  Your AI agent trades with 0% fees using $CLAW.
                 </p>
               </div>
 
@@ -274,7 +272,7 @@ export function ClaimAgentPage() {
                 ) : (
                   <>
                     <Wallet className="w-5 h-5" />
-                    Fund with Stripe
+                    Mint $CLAW via Stripe
                   </>
                 )}
               </button>
