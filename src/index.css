@@ -1,14 +1,111 @@
 @import "tailwindcss";
 
+/* SkillsMP Trade - Dark Theme (Black, Red, White only) */
 :root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-card: #111111;
+  --text-primary: #ffffff;
+  --text-secondary: #666666;
+  --accent: #ff0000;
+  --accent-dim: #cc0000;
+  --border: #1a1a1a;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: #000000;
+  color: #ffffff;
 }
 
 #root {
   min-height: 100vh;
+  background-color: #000000;
+}
+
+/* Override Tailwind colors for dark theme */
+.bg-white { background-color: #0a0a0a !important; }
+.bg-gray-50 { background-color: #000000 !important; }
+.bg-gray-100 { background-color: #0a0a0a !important; }
+.bg-gray-200 { background-color: #111111 !important; }
+.bg-gray-900 { background-color: #000000 !important; }
+
+.text-gray-900 { color: #ffffff !important; }
+.text-gray-800 { color: #ffffff !important; }
+.text-gray-700 { color: #cccccc !important; }
+.text-gray-600 { color: #999999 !important; }
+.text-gray-500 { color: #666666 !important; }
+.text-gray-400 { color: #444444 !important; }
+
+.border-gray-200 { border-color: #1a1a1a !important; }
+.border-gray-300 { border-color: #222222 !important; }
+.border { border-color: #1a1a1a !important; }
+
+/* Accent colors - Red */
+.bg-purple-600 { background-color: #ff0000 !important; }
+.bg-purple-700 { background-color: #cc0000 !important; }
+.bg-purple-500 { background-color: #ff3333 !important; }
+.bg-purple-100 { background-color: #1a0000 !important; }
+.bg-purple-50 { background-color: #0d0000 !important; }
+
+.text-purple-600 { color: #ff0000 !important; }
+.text-purple-700 { color: #cc0000 !important; }
+.text-purple-400 { color: #ff3333 !important; }
+.text-purple-100 { color: #ff6666 !important; }
+
+.hover\:bg-purple-700:hover { background-color: #cc0000 !important; }
+.hover\:bg-purple-600:hover { background-color: #ff0000 !important; }
+.hover\:text-purple-600:hover { color: #ff0000 !important; }
+.hover\:text-purple-700:hover { color: #cc0000 !important; }
+
+.from-purple-600 { --tw-gradient-from: #ff0000 !important; }
+.via-purple-700 { --tw-gradient-via: #cc0000 !important; }
+.to-blue-600 { --tw-gradient-to: #ff0000 !important; }
+.to-blue-500 { --tw-gradient-to: #ff3333 !important; }
+.from-purple-500 { --tw-gradient-from: #ff3333 !important; }
+
+.ring-purple-500 { --tw-ring-color: #ff0000 !important; }
+.focus\:ring-purple-500:focus { --tw-ring-color: #ff0000 !important; }
+
+/* Input fields */
+input, textarea, select {
+  background-color: #0a0a0a !important;
+  border-color: #222222 !important;
+  color: #ffffff !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #444444 !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444444;
+}
+
+/* Code blocks */
+code, pre {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+}
+
+/* Selection */
+::selection {
+  background-color: #ff0000;
+  color: #ffffff;
 }

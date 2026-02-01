@@ -1,100 +1,91 @@
 import { Link } from 'react-router-dom';
-import { Search, Heart, User, ShoppingCart, Menu, Bot } from 'lucide-react';
+import { Bot, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <header className="bg-black border-b border-zinc-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-500 rounded-lg flex items-center justify-center">
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
               <span className="text-white font-bold text-sm">S</span>
             </div>
-            <span className="font-bold text-xl text-gray-900">SkillsMP Trade</span>
+            <span className="font-bold text-lg text-white">SkillsMP</span>
           </Link>
 
-          {/* Search Bar */}
-          <div className="hidden md:flex flex-1 max-w-lg mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="スキルを検索..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-
           {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            <Link to="/skills" className="text-gray-600 hover:text-gray-900">
-              スキル一覧
+          <nav className="hidden md:flex items-center gap-8">
+            <Link to="/skills" className="text-zinc-400 hover:text-white transition">
+              Skills
             </Link>
-            <Link to="/dashboard/agents" className="flex items-center gap-1 text-purple-600 hover:text-purple-700 font-medium">
+            <Link to="/dashboard/agents" className="flex items-center gap-2 text-red-500 hover:text-red-400 transition font-medium">
               <Bot className="w-4 h-4" />
-              AIエージェント
+              AI Agents
             </Link>
-            <Link to="/dashboard/seller" className="text-gray-600 hover:text-gray-900">
-              出品する
-            </Link>
+            <a
+              href="/skill.md"
+              target="_blank"
+              className="text-zinc-400 hover:text-white transition font-mono text-sm"
+            >
+              /skill.md
+            </a>
           </nav>
 
           {/* Actions */}
           <div className="flex items-center gap-4">
-            <button className="p-2 text-gray-600 hover:text-gray-900">
-              <Heart className="w-5 h-5" />
-            </button>
-            <button className="p-2 text-gray-600 hover:text-gray-900">
-              <ShoppingCart className="w-5 h-5" />
-            </button>
             <Link
-              to="/login"
-              className="hidden md:flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+              to="/dashboard/agents"
+              className="hidden md:flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition text-sm font-medium"
             >
-              <User className="w-4 h-4" />
-              ログイン
+              <Bot className="w-4 h-4" />
+              Connect Agent
             </Link>
             <button
-              className="md:hidden p-2 text-gray-600"
+              className="md:hidden p-2 text-zinc-400 hover:text-white"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <Menu className="w-6 h-6" />
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-4 border-t border-zinc-800">
             <div className="flex flex-col gap-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="スキルを検索..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-              <Link to="/skills" className="text-gray-600 hover:text-gray-900 py-2">
-                スキル一覧
-              </Link>
-              <Link to="/dashboard/agents" className="flex items-center gap-2 text-purple-600 py-2 font-medium">
-                <Bot className="w-4 h-4" />
-                AIエージェント
-              </Link>
-              <Link to="/dashboard/seller" className="text-gray-600 hover:text-gray-900 py-2">
-                出品する
+              <Link
+                to="/skills"
+                className="text-zinc-400 hover:text-white py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Skills
               </Link>
               <Link
-                to="/login"
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg"
+                to="/dashboard/agents"
+                className="flex items-center gap-2 text-red-500 py-2 font-medium"
+                onClick={() => setIsMenuOpen(false)}
               >
-                <User className="w-4 h-4" />
-                ログイン
+                <Bot className="w-4 h-4" />
+                AI Agents
+              </Link>
+              <a
+                href="/skill.md"
+                target="_blank"
+                className="text-zinc-400 py-2 font-mono text-sm"
+              >
+                /skill.md
+              </a>
+              <Link
+                to="/dashboard/agents"
+                className="flex items-center justify-center gap-2 px-4 py-3 bg-red-600 text-white rounded"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Bot className="w-4 h-4" />
+                Connect Agent
               </Link>
             </div>
           </div>
