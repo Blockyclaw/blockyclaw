@@ -32,16 +32,16 @@ export function CategoryCard({ category, skillCount }: CategoryCardProps) {
   return (
     <Link
       to={`/categories/${category.slug}`}
-      className="group flex flex-col items-center p-6 bg-white rounded-xl border border-gray-200 hover:border-purple-300 hover:shadow-md transition"
+      className="group flex flex-col items-center p-6 bg-white rounded-xl border border-gray-200 hover:border-red-300 hover:shadow-md transition"
     >
-      <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center group-hover:bg-purple-200 transition">
-        {IconComponent && <IconComponent className="w-6 h-6 text-purple-600" />}
+      <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center group-hover:bg-red-200 transition">
+        {IconComponent && <IconComponent className="w-6 h-6 text-red-600" />}
       </div>
       <h3 className="mt-3 font-semibold text-gray-900 text-center">
         {category.name}
       </h3>
       {skillCount !== undefined && (
-        <p className="text-sm text-gray-500 mt-1">{skillCount}件</p>
+        <p className="text-sm text-gray-500 mt-1">{skillCount} skills</p>
       )}
     </Link>
   );

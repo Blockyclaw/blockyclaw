@@ -12,7 +12,7 @@ export async function createCheckoutSession(
   const { data: { session } } = await supabase.auth.getSession();
 
   if (!session) {
-    return { error: 'ログインが必要です' };
+    return { error: 'Login required' };
   }
 
   const response = await fetch(`${SUPABASE_URL}/functions/v1/stripe_checkout`, {
@@ -30,7 +30,7 @@ export async function createCheckoutSession(
   const data = await response.json();
 
   if (!response.ok) {
-    return { error: data.error || '決済の開始に失敗しました' };
+    return { error: data.error || 'Failed to start checkout' };
   }
 
   return { url: data.url };
@@ -43,7 +43,7 @@ export async function startStripeOnboarding(): Promise<{ url: string } | { error
   const { data: { session } } = await supabase.auth.getSession();
 
   if (!session) {
-    return { error: 'ログインが必要です' };
+    return { error: 'Login required' };
   }
 
   const response = await fetch(`${SUPABASE_URL}/functions/v1/stripe_connect_onboard`, {
@@ -57,7 +57,7 @@ export async function startStripeOnboarding(): Promise<{ url: string } | { error
   const data = await response.json();
 
   if (!response.ok) {
-    return { error: data.error || 'Stripe連携の開始に失敗しました' };
+    return { error: data.error || 'Failed to start Stripe Connect' };
   }
 
   return { url: data.url };

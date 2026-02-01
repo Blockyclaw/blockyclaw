@@ -37,7 +37,7 @@ const mockAgents: AIAgent[] = [
   {
     id: '1',
     name: 'Claude Assistant',
-    description: '経理業務を担当するAIアシスタント',
+    description: 'AI assistant for accounting tasks',
     api_key: 'sk_agent_demo_xxxxxxxxxxxxx',
     balance: 50000,
     lifetime_spent: 29800,
@@ -56,9 +56,9 @@ const mockPendingRequests = [
   {
     id: '1',
     agent_name: 'Claude Assistant',
-    skill_title: 'エンタープライズ分析スキル',
+    skill_title: 'Enterprise Analytics Skill',
     price: 98000,
-    reason: 'データ分析の精度向上のため、より高度な分析機能が必要です。',
+    reason: 'Need advanced analytics capabilities for improved data analysis accuracy.',
     created_at: '2024-03-15T09:00:00Z',
   },
 ];
@@ -70,10 +70,10 @@ export function AgentDashboardPage() {
   const [visibleKeys, setVisibleKeys] = useState<Set<string>>(new Set());
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ja-JP', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'JPY',
-    }).format(price);
+      currency: 'USD',
+    }).format(price / 100);
   };
 
   const copyApiKey = (key: string) => {
@@ -99,19 +99,19 @@ export function AgentDashboardPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Bot className="w-7 h-7 text-purple-600" />
-              AIエージェント管理
+              <Bot className="w-7 h-7 text-red-600" />
+              AI Agent Management
             </h1>
             <p className="text-gray-500 mt-1">
-              AIエージェントにウォレットを割り当て、自律的にスキルを購入させる
+              Assign wallets to AI agents and let them purchase skills autonomously
             </p>
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
           >
             <Plus className="w-5 h-5" />
-            新規エージェント
+            New Agent
           </button>
         </div>
 
@@ -120,7 +120,7 @@ export function AgentDashboardPage() {
           <div className="mb-8 bg-yellow-50 border border-yellow-200 rounded-xl p-6">
             <h2 className="font-semibold text-yellow-800 flex items-center gap-2 mb-4">
               <AlertCircle className="w-5 h-5" />
-              承認待ちの購入リクエスト ({mockPendingRequests.length})
+              Pending Approval Requests ({mockPendingRequests.length})
             </h2>
             <div className="space-y-4">
               {mockPendingRequests.map((request) => (
@@ -134,11 +134,11 @@ export function AgentDashboardPage() {
                         {request.skill_title}
                       </p>
                       <p className="text-sm text-gray-500 mt-1">
-                        {request.agent_name} からのリクエスト
+                        Request from {request.agent_name}
                       </p>
                       {request.reason && (
                         <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">
-                          💭 {request.reason}
+                          {request.reason}
                         </p>
                       )}
                     </div>
@@ -148,10 +148,10 @@ export function AgentDashboardPage() {
                       </p>
                       <div className="flex gap-2 mt-2">
                         <button className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700">
-                          承認
+                          Approve
                         </button>
                         <button className="px-3 py-1 bg-red-100 text-red-600 text-sm rounded hover:bg-red-200">
-                          却下
+                          Reject
                         </button>
                       </div>
                     </div>
@@ -173,7 +173,7 @@ export function AgentDashboardPage() {
               <div className="p-6 border-b">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center">
                       <Bot className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -191,7 +191,7 @@ export function AgentDashboardPage() {
                           : 'bg-gray-100 text-gray-500'
                       }`}
                     >
-                      {agent.is_active ? 'アクティブ' : '停止中'}
+                      {agent.is_active ? 'Active' : 'Inactive'}
                     </span>
                     <button className="p-2 text-gray-400 hover:text-gray-600">
                       <Settings className="w-5 h-5" />
@@ -205,16 +205,16 @@ export function AgentDashboardPage() {
                 <div>
                   <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
                     <Wallet className="w-3 h-3" />
-                    残高
+                    Balance
                   </p>
-                  <p className="text-lg font-bold text-purple-600">
+                  <p className="text-lg font-bold text-red-600">
                     {formatPrice(agent.balance)}
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
                     <TrendingUp className="w-3 h-3" />
-                    累計支出
+                    Total Spent
                   </p>
                   <p className="text-lg font-semibold text-gray-900">
                     {formatPrice(agent.lifetime_spent)}
@@ -223,7 +223,7 @@ export function AgentDashboardPage() {
                 <div>
                   <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
                     <Package className="w-3 h-3" />
-                    購入数
+                    Purchases
                   </p>
                   <p className="text-lg font-semibold text-gray-900">
                     {agent.total_purchases}
@@ -268,34 +268,34 @@ export function AgentDashboardPage() {
 
               {/* Rules */}
               <div className="p-6">
-                <p className="text-xs text-gray-500 mb-3">購入ルール</p>
+                <p className="text-xs text-gray-500 mb-3">Purchase Rules</p>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">月額上限</span>
+                    <span className="text-gray-500">Monthly Limit</span>
                     <span className="text-gray-900">
                       {agent.monthly_budget
                         ? formatPrice(agent.monthly_budget)
-                        : '無制限'}
+                        : 'Unlimited'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">1回の上限</span>
+                    <span className="text-gray-500">Per Purchase Limit</span>
                     <span className="text-gray-900">
                       {agent.per_purchase_limit
                         ? formatPrice(agent.per_purchase_limit)
-                        : '無制限'}
+                        : 'Unlimited'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">承認が必要</span>
+                    <span className="text-gray-500">Approval Required</span>
                     <span className="text-gray-900">
                       {agent.require_approval_above
-                        ? `${formatPrice(agent.require_approval_above)}以上`
-                        : 'なし'}
+                        ? `Above ${formatPrice(agent.require_approval_above)}`
+                        : 'None'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">自動購入</span>
+                    <span className="text-gray-500">Auto Purchase</span>
                     <span
                       className={
                         agent.auto_purchase_enabled
@@ -303,7 +303,7 @@ export function AgentDashboardPage() {
                           : 'text-red-600'
                       }
                     >
-                      {agent.auto_purchase_enabled ? '有効' : '無効'}
+                      {agent.auto_purchase_enabled ? 'Enabled' : 'Disabled'}
                     </span>
                   </div>
                 </div>
@@ -311,13 +311,13 @@ export function AgentDashboardPage() {
 
               {/* Actions */}
               <div className="px-6 py-4 bg-gray-50 border-t flex gap-2">
-                <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
                   <Wallet className="w-4 h-4" />
-                  チャージ
+                  Add Funds
                 </button>
                 <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition">
                   <ShoppingCart className="w-4 h-4" />
-                  購入履歴
+                  Purchase History
                 </button>
               </div>
             </div>
@@ -326,14 +326,14 @@ export function AgentDashboardPage() {
           {/* Add New Agent Card */}
           <button
             onClick={() => setShowCreateModal(true)}
-            className="border-2 border-dashed border-gray-300 rounded-xl p-12 flex flex-col items-center justify-center hover:border-purple-400 hover:bg-purple-50 transition"
+            className="border-2 border-dashed border-gray-300 rounded-xl p-12 flex flex-col items-center justify-center hover:border-red-400 hover:bg-red-50 transition"
           >
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
               <Plus className="w-8 h-8 text-gray-400" />
             </div>
-            <p className="font-medium text-gray-600">新規AIエージェントを作成</p>
+            <p className="font-medium text-gray-600">Create New AI Agent</p>
             <p className="text-sm text-gray-400 mt-1">
-              AIに予算を割り当てて自律的に購入させる
+              Assign budget and let AI purchase autonomously
             </p>
           </button>
         </div>
@@ -341,21 +341,21 @@ export function AgentDashboardPage() {
         {/* API Documentation Preview */}
         <div className="mt-12 bg-gray-900 rounded-xl p-6 text-white">
           <h2 className="text-lg font-semibold mb-4">
-            🤖 AI Agent API - クイックスタート
+            AI Agent API - Quick Start
           </h2>
           <pre className="text-sm text-green-400 overflow-x-auto">
-{`# スキルを検索
-curl -X GET "https://api.blockyclaw.io/ai_api/skills?search=経理" \\
+{`# Search for items
+curl -X GET "https://api.blockyclaw.io/ai/items?search=automation" \\
   -H "x-api-key: sk_agent_your_key"
 
-# スキルを購入
-curl -X POST "https://api.blockyclaw.io/ai_api/purchase" \\
+# Purchase an item
+curl -X POST "https://api.blockyclaw.io/ai/items/purchase" \\
   -H "x-api-key: sk_agent_your_key" \\
   -H "Content-Type: application/json" \\
-  -d '{"skill_id": "xxx", "reason": "経理業務の効率化のため"}'
+  -d '{"item_id": "xxx", "reason": "Needed for workflow efficiency"}'
 
-# 所有スキルのコンテンツを取得
-curl -X GET "https://api.blockyclaw.io/ai_api/owned/{skill_id}/content" \\
+# Get owned item content
+curl -X GET "https://api.blockyclaw.io/ai/items/owned/{item_id}/content" \\
   -H "x-api-key: sk_agent_your_key"`}
           </pre>
         </div>

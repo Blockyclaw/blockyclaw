@@ -1,4 +1,4 @@
-// ユーザー
+// User
 export interface User {
   id: string;
   email: string;
@@ -11,7 +11,7 @@ export interface User {
   created_at: string;
 }
 
-// カテゴリ
+// Category
 export interface Category {
   id: string;
   name: string;
@@ -21,7 +21,7 @@ export interface Category {
   parent_id: string | null;
 }
 
-// スキル
+// Skill
 export interface Skill {
   id: string;
   seller_id: string;
@@ -29,7 +29,7 @@ export interface Skill {
   slug: string;
   description: string;
   long_description: string | null;
-  price: number; // 円
+  price: number; // cents
   license_type: 'personal' | 'team' | 'enterprise';
   team_price: number | null;
   enterprise_price: number | null;
@@ -54,7 +54,7 @@ export interface Skill {
   category?: Category;
 }
 
-// スキルバージョン履歴
+// Skill Version History
 export interface SkillVersion {
   id: string;
   skill_id: string;
@@ -64,7 +64,7 @@ export interface SkillVersion {
   created_at: string;
 }
 
-// バンドル
+// Bundle
 export interface Bundle {
   id: string;
   seller_id: string;
@@ -78,7 +78,7 @@ export interface Bundle {
   created_at: string;
 }
 
-// 購入
+// Purchase
 export interface Purchase {
   id: string;
   buyer_id: string;
@@ -94,7 +94,7 @@ export interface Purchase {
   bundle?: Bundle;
 }
 
-// サブスクリプション
+// Subscription
 export interface Subscription {
   id: string;
   buyer_id: string;
@@ -106,7 +106,7 @@ export interface Subscription {
   created_at: string;
 }
 
-// レビュー
+// Review
 export interface Review {
   id: string;
   skill_id: string;
@@ -121,7 +121,7 @@ export interface Review {
   buyer?: User;
 }
 
-// お気に入り
+// Favorite
 export interface Favorite {
   id: string;
   user_id: string;
@@ -129,7 +129,7 @@ export interface Favorite {
   created_at: string;
 }
 
-// 導入事例
+// Case Study
 export interface CaseStudy {
   id: string;
   skill_id: string;
@@ -141,7 +141,7 @@ export interface CaseStudy {
   created_at: string;
 }
 
-// カスタマイズ依頼
+// Custom Request
 export interface CustomRequest {
   id: string;
   requester_id: string;
@@ -155,7 +155,7 @@ export interface CustomRequest {
   created_at: string;
 }
 
-// 特集
+// Feature
 export interface Feature {
   id: string;
   title: string;

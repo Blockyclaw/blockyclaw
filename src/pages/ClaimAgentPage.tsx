@@ -15,22 +15,22 @@ export function ClaimAgentPage() {
   const [step, setStep] = useState<'preview' | 'configure' | 'fund' | 'complete'>('preview');
   const [loading, setLoading] = useState(false);
   const [config, setConfig] = useState({
-    monthlyBudget: 100000,
-    perPurchaseLimit: 30000,
-    requireApprovalAbove: 50000,
+    monthlyBudget: 1000,
+    perPurchaseLimit: 300,
+    requireApprovalAbove: 500,
   });
 
   // Mock agent data (would fetch from API)
   const agent = {
     name: 'Claude Assistant',
-    description: '経理業務を担当するAIアシスタント。請求書処理や経費精算を自動化します。',
+    description: 'An AI assistant handling accounting tasks. Automates invoice processing and expense reports.',
     created_at: new Date().toISOString(),
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ja-JP', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'JPY',
+      currency: 'USD',
     }).format(price);
   };
 
@@ -58,22 +58,22 @@ export function ClaimAgentPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-4">
       <div className="max-w-lg w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
             <Bot className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">AIエージェントをクレーム</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Claim Your AI Agent</h1>
           <p className="text-gray-500 mt-2">
-            あなたのAIエージェントが所有権の確認を待っています
+            Your AI agent is waiting for ownership verification
           </p>
         </div>
 
         {/* Progress Steps */}
         <div className="flex items-center justify-center gap-2 mb-8">
-          {['確認', '設定', 'チャージ', '完了'].map((label, i) => {
+          {['Verify', 'Configure', 'Fund', 'Complete'].map((label, i) => {
             const stepIndex = ['preview', 'configure', 'fund', 'complete'].indexOf(step);
             const isActive = i === stepIndex;
             const isComplete = i < stepIndex;
@@ -85,7 +85,7 @@ export function ClaimAgentPage() {
                     isComplete
                       ? 'bg-green-500 text-white'
                       : isActive
-                      ? 'bg-purple-600 text-white'
+                      ? 'bg-red-600 text-white'
                       : 'bg-gray-200 text-gray-500'
                   }`}
                 >
@@ -108,12 +108,12 @@ export function ClaimAgentPage() {
           {step === 'preview' && (
             <div className="p-6">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl flex items-center justify-center">
-                  <Bot className="w-6 h-6 text-purple-600" />
+                <div className="w-12 h-12 bg-gradient-to-br from-red-100 to-orange-100 rounded-xl flex items-center justify-center">
+                  <Bot className="w-6 h-6 text-red-600" />
                 </div>
                 <div>
                   <h2 className="font-semibold text-gray-900">{agent.name}</h2>
-                  <p className="text-sm text-gray-500">クレーム待ち</p>
+                  <p className="text-sm text-gray-500">Pending Claim</p>
                 </div>
               </div>
 
@@ -124,31 +124,31 @@ export function ClaimAgentPage() {
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Shield className="w-4 h-4 text-green-500" />
-                  <span>クレームするとこのAIの所有者になります</span>
+                  <span>Claiming makes you the owner of this AI</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Wallet className="w-4 h-4 text-purple-500" />
-                  <span>ウォレットにチャージして予算を設定できます</span>
+                  <Wallet className="w-4 h-4 text-red-500" />
+                  <span>You can fund the wallet and set budgets</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <AlertCircle className="w-4 h-4 text-yellow-500" />
-                  <span>24時間以内にクレームしてください</span>
+                  <span>Please claim within 24 hours</span>
                 </div>
               </div>
 
               <button
                 onClick={handleClaim}
                 disabled={loading}
-                className="w-full py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    確認中...
+                    Verifying...
                   </>
                 ) : (
                   <>
-                    このAIをクレームする
+                    Claim This AI
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
@@ -159,13 +159,13 @@ export function ClaimAgentPage() {
           {step === 'configure' && (
             <div className="p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">
-                予算とルールを設定
+                Set Budget & Rules
               </h2>
 
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    月額予算上限
+                    Monthly Budget Limit
                   </label>
                   <input
                     type="number"
@@ -173,16 +173,16 @@ export function ClaimAgentPage() {
                     onChange={(e) =>
                       setConfig({ ...config, monthlyBudget: parseInt(e.target.value) || 0 })
                     }
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    AIが1ヶ月に使える最大金額
+                    Maximum amount the AI can spend per month
                   </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    1回の購入上限
+                    Per-Purchase Limit
                   </label>
                   <input
                     type="number"
@@ -190,13 +190,13 @@ export function ClaimAgentPage() {
                     onChange={(e) =>
                       setConfig({ ...config, perPurchaseLimit: parseInt(e.target.value) || 0 })
                     }
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    承認が必要な金額
+                    Require Approval Above
                   </label>
                   <input
                     type="number"
@@ -207,10 +207,10 @@ export function ClaimAgentPage() {
                         requireApprovalAbove: parseInt(e.target.value) || 0,
                       })
                     }
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    この金額以上の購入はあなたの承認が必要になります
+                    Purchases above this amount require your approval
                   </p>
                 </div>
               </div>
@@ -218,16 +218,16 @@ export function ClaimAgentPage() {
               <button
                 onClick={handleConfigure}
                 disabled={loading}
-                className="w-full mt-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full mt-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    保存中...
+                    Saving...
                   </>
                 ) : (
                   <>
-                    次へ：ウォレットをチャージ
+                    Next: Fund Wallet
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
@@ -238,14 +238,14 @@ export function ClaimAgentPage() {
           {step === 'fund' && (
             <div className="p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">
-                ウォレットをチャージ
+                Fund Your Wallet
               </h2>
 
               <div className="grid grid-cols-2 gap-3 mb-6">
-                {[10000, 50000, 100000, 200000].map((amount) => (
+                {[100, 500, 1000, 2000].map((amount) => (
                   <button
                     key={amount}
-                    className="p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition text-center"
+                    className="p-4 border-2 border-gray-200 rounded-lg hover:border-red-500 hover:bg-red-50 transition text-center"
                   >
                     <p className="text-lg font-bold text-gray-900">
                       {formatPrice(amount)}
@@ -256,25 +256,25 @@ export function ClaimAgentPage() {
 
               <div className="bg-gray-50 rounded-lg p-4 mb-6">
                 <p className="text-sm text-gray-600">
-                  💡 チャージした金額はAIエージェントのウォレットに入ります。
-                  設定した予算内でスキルを自律的に購入できるようになります。
+                  Funds are deposited into your AI agent's wallet.
+                  The agent can autonomously purchase skills within your budget settings.
                 </p>
               </div>
 
               <button
                 onClick={handleFund}
                 disabled={loading}
-                className="w-full py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    処理中...
+                    Processing...
                   </>
                 ) : (
                   <>
                     <Wallet className="w-5 h-5" />
-                    Stripeでチャージ
+                    Fund with Stripe
                   </>
                 )}
               </button>
@@ -283,7 +283,7 @@ export function ClaimAgentPage() {
                 onClick={() => setStep('complete')}
                 className="w-full mt-3 py-2 text-gray-600 hover:text-gray-900 transition text-sm"
               >
-                後でチャージする
+                Fund Later
               </button>
             </div>
           )}
@@ -294,24 +294,24 @@ export function ClaimAgentPage() {
                 <Check className="w-8 h-8 text-green-600" />
               </div>
               <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                クレーム完了！
+                Claim Complete!
               </h2>
               <p className="text-gray-500 mb-6">
-                {agent.name} があなたのAIエージェントとして登録されました。
+                {agent.name} has been registered as your AI agent.
               </p>
 
               <div className="bg-gray-900 rounded-lg p-4 text-left mb-6">
-                <p className="text-xs text-gray-400 mb-2">AIエージェントへの指示:</p>
+                <p className="text-xs text-gray-400 mb-2">Instructions for your AI agent:</p>
                 <code className="text-sm text-green-400">
-                  ウォレット残高を確認し、必要なスキルを購入できます。
+                  You can check wallet balance and purchase needed skills.
                 </code>
               </div>
 
               <Link
                 to="/dashboard/agents"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
               >
-                エージェント管理へ
+                Go to Agent Management
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
@@ -320,7 +320,7 @@ export function ClaimAgentPage() {
 
         {/* Footer */}
         <p className="text-center text-sm text-gray-500 mt-6">
-          クレームトークン: {token?.slice(0, 8)}...
+          Claim Token: {token?.slice(0, 8)}...
         </p>
       </div>
     </div>

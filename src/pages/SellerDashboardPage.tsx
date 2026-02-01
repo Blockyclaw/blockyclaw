@@ -29,9 +29,9 @@ const mockSkills: Skill[] = [
   {
     id: '1',
     seller_id: '1',
-    title: '経理自動化スキル',
+    title: 'Accounting Automation Skill',
     slug: 'accounting-automation',
-    description: '請求書処理、経費精算、仕訳作成を自動化',
+    description: 'Automate invoice processing, expense reports, and journal entries',
     long_description: null,
     price: 9800,
     license_type: 'personal',
@@ -45,7 +45,7 @@ const mockSkills: Skill[] = [
     claude_code_version_min: null,
     claude_code_version_max: null,
     category_id: 'finance',
-    tags: ['経理', '自動化'],
+    tags: ['accounting', 'automation'],
     is_published: true,
     is_featured: true,
     download_count: 234,
@@ -57,9 +57,9 @@ const mockSkills: Skill[] = [
   {
     id: '2',
     seller_id: '1',
-    title: '契約書レビュースキル',
+    title: 'Contract Review Skill',
     slug: 'contract-review',
-    description: '契約書のリスク分析と修正提案',
+    description: 'Risk analysis and revision suggestions for contracts',
     long_description: null,
     price: 19800,
     license_type: 'personal',
@@ -73,7 +73,7 @@ const mockSkills: Skill[] = [
     claude_code_version_min: null,
     claude_code_version_max: null,
     category_id: 'legal',
-    tags: ['法務', '契約'],
+    tags: ['legal', 'contract'],
     is_published: false,
     is_featured: false,
     download_count: 0,
@@ -88,10 +88,10 @@ export function SellerDashboardPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'skills' | 'sales'>('overview');
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ja-JP', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'JPY',
-    }).format(price);
+      currency: 'USD',
+    }).format(price / 100);
   };
 
   return (
@@ -100,24 +100,24 @@ export function SellerDashboardPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">出品者ダッシュボード</h1>
-            <p className="text-gray-500 mt-1">スキルの管理と売上を確認できます</p>
+            <h1 className="text-2xl font-bold text-gray-900">Seller Dashboard</h1>
+            <p className="text-gray-500 mt-1">Manage your skills and view sales</p>
           </div>
           <Link
             to="/dashboard/seller/skills/new"
-            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
           >
             <Plus className="w-5 h-5" />
-            新規スキル登録
+            New Skill
           </Link>
         </div>
 
         {/* Tabs */}
         <div className="flex gap-1 mb-6 bg-gray-100 p-1 rounded-lg w-fit">
           {[
-            { key: 'overview', label: '概要', icon: BarChart3 },
-            { key: 'skills', label: 'スキル管理', icon: Package },
-            { key: 'sales', label: '売上', icon: DollarSign },
+            { key: 'overview', label: 'Overview', icon: BarChart3 },
+            { key: 'skills', label: 'Skills', icon: Package },
+            { key: 'sales', label: 'Sales', icon: DollarSign },
           ].map(({ key, label, icon: Icon }) => (
             <button
               key={key}
@@ -152,7 +152,7 @@ export function SellerDashboardPage() {
                 <p className="mt-4 text-2xl font-bold text-gray-900">
                   {formatPrice(mockStats.totalRevenue)}
                 </p>
-                <p className="text-sm text-gray-500">総売上</p>
+                <p className="text-sm text-gray-500">Total Revenue</p>
               </div>
 
               <div className="bg-white rounded-xl border p-6">
@@ -168,17 +168,17 @@ export function SellerDashboardPage() {
                 <p className="mt-4 text-2xl font-bold text-gray-900">
                   {mockStats.totalSales}
                 </p>
-                <p className="text-sm text-gray-500">販売数</p>
+                <p className="text-sm text-gray-500">Total Sales</p>
               </div>
 
               <div className="bg-white rounded-xl border p-6">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Download className="w-5 h-5 text-purple-600" />
+                <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                  <Download className="w-5 h-5 text-red-600" />
                 </div>
                 <p className="mt-4 text-2xl font-bold text-gray-900">
                   {mockStats.totalDownloads}
                 </p>
-                <p className="text-sm text-gray-500">ダウンロード数</p>
+                <p className="text-sm text-gray-500">Total Downloads</p>
               </div>
 
               <div className="bg-white rounded-xl border p-6">
@@ -188,21 +188,21 @@ export function SellerDashboardPage() {
                 <p className="mt-4 text-2xl font-bold text-gray-900">
                   {mockStats.averageRating}
                 </p>
-                <p className="text-sm text-gray-500">平均評価</p>
+                <p className="text-sm text-gray-500">Average Rating</p>
               </div>
             </div>
 
             {/* Recent Skills */}
             <div className="bg-white rounded-xl border">
               <div className="p-6 border-b">
-                <h2 className="font-semibold text-gray-900">登録スキル</h2>
+                <h2 className="font-semibold text-gray-900">Listed Skills</h2>
               </div>
               <div className="divide-y">
                 {mockSkills.map((skill) => (
                   <div key={skill.id} className="p-6 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg flex items-center justify-center">
-                        <span className="text-purple-600 font-bold">
+                      <div className="w-12 h-12 bg-gradient-to-br from-red-100 to-orange-100 rounded-lg flex items-center justify-center">
+                        <span className="text-red-600 font-bold">
                           {skill.title.charAt(0)}
                         </span>
                       </div>
@@ -229,7 +229,7 @@ export function SellerDashboardPage() {
                             : 'bg-gray-100 text-gray-600'
                         }`}
                       >
-                        {skill.is_published ? '公開中' : '下書き'}
+                        {skill.is_published ? 'Published' : 'Draft'}
                       </span>
                       <Link
                         to={`/dashboard/seller/skills/${skill.id}`}
@@ -249,35 +249,35 @@ export function SellerDashboardPage() {
         {activeTab === 'skills' && (
           <div className="bg-white rounded-xl border">
             <div className="p-6 border-b flex items-center justify-between">
-              <h2 className="font-semibold text-gray-900">スキル一覧</h2>
+              <h2 className="font-semibold text-gray-900">All Skills</h2>
               <Link
                 to="/dashboard/seller/skills/new"
-                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm"
+                className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm"
               >
                 <Plus className="w-4 h-4" />
-                新規登録
+                New Skill
               </Link>
             </div>
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">
-                    スキル
+                    Skill
                   </th>
                   <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">
-                    価格
+                    Price
                   </th>
                   <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">
-                    ステータス
+                    Status
                   </th>
                   <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">
-                    販売数
+                    Sales
                   </th>
                   <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">
-                    評価
+                    Rating
                   </th>
                   <th className="text-right px-6 py-3 text-sm font-medium text-gray-500">
-                    操作
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -286,8 +286,8 @@ export function SellerDashboardPage() {
                   <tr key={skill.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <span className="text-purple-600 font-bold text-sm">
+                        <div className="w-10 h-10 bg-gradient-to-br from-red-100 to-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <span className="text-red-600 font-bold text-sm">
                             {skill.title.charAt(0)}
                           </span>
                         </div>
@@ -308,7 +308,7 @@ export function SellerDashboardPage() {
                             : 'bg-gray-100 text-gray-600'
                         }`}
                       >
-                        {skill.is_published ? '公開中' : '下書き'}
+                        {skill.is_published ? 'Published' : 'Draft'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-gray-900">
@@ -330,14 +330,14 @@ export function SellerDashboardPage() {
                         <Link
                           to={`/skills/${skill.slug}`}
                           className="p-2 text-gray-400 hover:text-gray-600"
-                          title="プレビュー"
+                          title="Preview"
                         >
                           <Eye className="w-5 h-5" />
                         </Link>
                         <Link
                           to={`/dashboard/seller/skills/${skill.id}`}
                           className="p-2 text-gray-400 hover:text-gray-600"
-                          title="編集"
+                          title="Edit"
                         >
                           <Edit className="w-5 h-5" />
                         </Link>
@@ -354,7 +354,7 @@ export function SellerDashboardPage() {
                         )}
                         <button
                           className="p-2 text-gray-400 hover:text-red-600"
-                          title="削除"
+                          title="Delete"
                         >
                           <Trash2 className="w-5 h-5" />
                         </button>
@@ -371,46 +371,46 @@ export function SellerDashboardPage() {
         {activeTab === 'sales' && (
           <div className="space-y-6">
             <div className="bg-white rounded-xl border p-6">
-              <h2 className="font-semibold text-gray-900 mb-4">売上グラフ</h2>
+              <h2 className="font-semibold text-gray-900 mb-4">Sales Chart</h2>
               <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
-                グラフ表示エリア（実装予定）
+                Chart Area (Coming Soon)
               </div>
             </div>
 
             <div className="bg-white rounded-xl border">
               <div className="p-6 border-b">
-                <h2 className="font-semibold text-gray-900">取引履歴</h2>
+                <h2 className="font-semibold text-gray-900">Transaction History</h2>
               </div>
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">
-                      日時
+                      Date
                     </th>
                     <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">
-                      スキル
+                      Skill
                     </th>
                     <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">
-                      ライセンス
+                      License
                     </th>
                     <th className="text-right px-6 py-3 text-sm font-medium text-gray-500">
-                      売上
+                      Revenue
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
                   <tr className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-gray-500">2024/03/10 14:32</td>
-                    <td className="px-6 py-4 text-gray-900">経理自動化スキル</td>
-                    <td className="px-6 py-4 text-gray-900">チーム</td>
+                    <td className="px-6 py-4 text-gray-900">Accounting Automation Skill</td>
+                    <td className="px-6 py-4 text-gray-900">Team</td>
                     <td className="px-6 py-4 text-right text-gray-900 font-medium">
                       {formatPrice(29800)}
                     </td>
                   </tr>
                   <tr className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-gray-500">2024/03/09 10:15</td>
-                    <td className="px-6 py-4 text-gray-900">経理自動化スキル</td>
-                    <td className="px-6 py-4 text-gray-900">個人</td>
+                    <td className="px-6 py-4 text-gray-900">Accounting Automation Skill</td>
+                    <td className="px-6 py-4 text-gray-900">Personal</td>
                     <td className="px-6 py-4 text-right text-gray-900 font-medium">
                       {formatPrice(9800)}
                     </td>

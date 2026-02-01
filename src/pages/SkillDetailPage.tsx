@@ -20,35 +20,35 @@ import { createCheckoutSession } from '../lib/stripe';
 const mockSkill: Skill = {
   id: '1',
   seller_id: '1',
-  title: '経理自動化スキル',
+  title: 'Accounting Automation Skill',
   slug: 'accounting-automation',
-  description: '請求書処理、経費精算、仕訳作成を自動化するスキルパック',
+  description: 'Automate invoice processing, expense reports, and journal entries',
   long_description: `
-## 概要
+## Overview
 
-このスキルは、日々の経理業務を大幅に効率化します。
+This skill significantly streamlines your daily accounting tasks.
 
-### 主な機能
+### Key Features
 
-- **請求書処理**: PDFの請求書を自動で読み取り、仕訳データを生成
-- **経費精算**: レシート画像から経費明細を抽出
-- **仕訳作成**: 取引内容から適切な勘定科目を推定
+- **Invoice Processing**: Automatically reads PDF invoices and generates journal entries
+- **Expense Reports**: Extracts expense details from receipt images
+- **Journal Entries**: Infers appropriate account codes from transaction content
 
-### 使用例
+### Usage Examples
 
 \`\`\`
-# 請求書を処理
+# Process an invoice
 /accounting invoice process /path/to/invoice.pdf
 
-# 経費精算
+# Process expense
 /accounting expense /path/to/receipt.jpg
 \`\`\`
 
-### 対応フォーマット
+### Supported Formats
 
-- PDF, PNG, JPG (請求書・レシート)
-- CSV (明細データ)
-- 弥生会計、freee対応形式でエクスポート可能
+- PDF, PNG, JPG (invoices & receipts)
+- CSV (transaction data)
+- Export compatible with QuickBooks, Xero, FreshBooks
   `,
   price: 9800,
   license_type: 'personal',
@@ -66,7 +66,7 @@ const mockSkill: Skill = {
   claude_code_version_min: '1.0.0',
   claude_code_version_max: null,
   category_id: 'finance',
-  tags: ['経理', '自動化', '請求書', '経費精算', '仕訳'],
+  tags: ['accounting', 'automation', 'invoice', 'expense', 'journal'],
   is_published: true,
   is_featured: true,
   download_count: 234,
@@ -77,10 +77,10 @@ const mockSkill: Skill = {
   seller: {
     id: '1',
     email: 'seller@example.com',
-    display_name: '経理プロ',
+    display_name: 'AccountingPro',
     avatar_url: null,
-    bio: '経理業務の自動化を専門とするエンジニア。10年以上の経理システム開発経験あり。',
-    github_username: 'keiri-pro',
+    bio: 'Engineer specializing in accounting automation. Over 10 years of experience in accounting system development.',
+    github_username: 'accounting-pro',
     stripe_account_id: null,
     is_seller: true,
     created_at: '',
@@ -93,16 +93,16 @@ const mockReviews: Review[] = [
     skill_id: '1',
     buyer_id: '1',
     rating: 5,
-    title: '業務時間が半分になりました',
+    title: 'Cut my work time in half',
     content:
-      '毎月の請求書処理に3時間かかっていましたが、このスキルを導入してから1.5時間で終わるようになりました。',
+      'Monthly invoice processing used to take 3 hours, but after implementing this skill, it now finishes in 1.5 hours.',
     is_verified_purchase: true,
     created_at: '2024-03-01',
     updated_at: '2024-03-01',
     buyer: {
       id: '1',
       email: 'buyer@example.com',
-      display_name: '田中太郎',
+      display_name: 'John Smith',
       avatar_url: null,
       bio: null,
       github_username: null,
@@ -116,15 +116,15 @@ const mockReviews: Review[] = [
     skill_id: '1',
     buyer_id: '2',
     rating: 4,
-    title: '概ね満足',
-    content: 'freeeへのエクスポートがスムーズで助かっています。マネーフォワード対応も希望。',
+    title: 'Generally satisfied',
+    content: 'The QuickBooks export is smooth and helpful. Would love to see Xero support added.',
     is_verified_purchase: true,
     created_at: '2024-02-15',
     updated_at: '2024-02-15',
     buyer: {
       id: '2',
       email: 'buyer2@example.com',
-      display_name: '山田花子',
+      display_name: 'Jane Doe',
       avatar_url: null,
       bio: null,
       github_username: null,
@@ -160,10 +160,10 @@ export function SkillDetailPage() {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ja-JP', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'JPY',
-    }).format(price);
+      currency: 'USD',
+    }).format(price / 100);
   };
 
   return (
@@ -173,11 +173,11 @@ export function SkillDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <nav className="flex items-center gap-2 text-sm text-gray-500">
             <Link to="/" className="hover:text-gray-700">
-              ホーム
+              Home
             </Link>
             <ChevronRight className="w-4 h-4" />
             <Link to="/skills" className="hover:text-gray-700">
-              スキル一覧
+              Skills
             </Link>
             <ChevronRight className="w-4 h-4" />
             <span className="text-gray-900">{skill.title}</span>
@@ -195,7 +195,7 @@ export function SkillDetailPage() {
                 {skill.demo_video_url ? (
                   <div className="w-full h-full flex items-center justify-center">
                     <button className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition">
-                      <Play className="w-8 h-8 text-purple-600 ml-1" />
+                      <Play className="w-8 h-8 text-red-600 ml-1" />
                     </button>
                   </div>
                 ) : (
@@ -211,7 +211,7 @@ export function SkillDetailPage() {
                   {skill.demo_images.map((img, i) => (
                     <button
                       key={i}
-                      className="w-24 h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 border-transparent hover:border-purple-500"
+                      className="w-24 h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 border-transparent hover:border-red-500"
                     >
                       <img
                         src={img}
@@ -246,12 +246,12 @@ export function SkillDetailPage() {
                   <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                   <span className="font-semibold">{skill.rating_avg}</span>
                   <span className="text-gray-500">
-                    ({skill.rating_count}件のレビュー)
+                    ({skill.rating_count} reviews)
                   </span>
                 </div>
                 <div className="flex items-center gap-1 text-gray-500">
                   <Download className="w-5 h-5" />
-                  {skill.download_count} ダウンロード
+                  {skill.download_count} downloads
                 </div>
                 <span className="text-gray-500">v{skill.version}</span>
               </div>
@@ -272,9 +272,9 @@ export function SkillDetailPage() {
             {/* Description */}
             <div className="bg-white rounded-xl border p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                詳細説明
+                Description
               </h2>
-              <div className="prose prose-purple max-w-none">
+              <div className="prose prose-red max-w-none">
                 {/* TODO: Render markdown */}
                 <pre className="whitespace-pre-wrap text-sm text-gray-600">
                   {skill.long_description}
@@ -286,10 +286,10 @@ export function SkillDetailPage() {
             <div className="bg-white rounded-xl border p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-gray-900">
-                  レビュー ({skill.rating_count})
+                  Reviews ({skill.rating_count})
                 </h2>
-                <button className="text-purple-600 hover:text-purple-700">
-                  レビューを書く
+                <button className="text-red-600 hover:text-red-700">
+                  Write a Review
                 </button>
               </div>
 
@@ -313,7 +313,7 @@ export function SkillDetailPage() {
                           {review.is_verified_purchase && (
                             <span className="flex items-center gap-1 text-xs text-green-600">
                               <ShieldCheck className="w-3 h-3" />
-                              購入済み
+                              Verified Purchase
                             </span>
                           )}
                         </div>
@@ -330,7 +330,7 @@ export function SkillDetailPage() {
                           ))}
                           <span className="text-sm text-gray-500 ml-2">
                             {new Date(review.created_at).toLocaleDateString(
-                              'ja-JP'
+                              'en-US'
                             )}
                           </span>
                         </div>
@@ -358,7 +358,7 @@ export function SkillDetailPage() {
                 <div className="text-3xl font-bold text-gray-900">
                   {formatPrice(skill.price)}
                 </div>
-                <p className="text-sm text-gray-500 mt-1">個人ライセンス</p>
+                <p className="text-sm text-gray-500 mt-1">Personal License</p>
 
                 {error && (
                   <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
@@ -369,15 +369,15 @@ export function SkillDetailPage() {
                 <button
                   onClick={() => handlePurchase('personal')}
                   disabled={purchasing !== null}
-                  className="w-full mt-4 px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full mt-4 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {purchasing === 'personal' ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      処理中...
+                      Processing...
                     </>
                   ) : (
-                    '購入する'
+                    'Purchase'
                   )}
                 </button>
 
@@ -391,10 +391,10 @@ export function SkillDetailPage() {
                       {purchasing === 'team' ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          処理中...
+                          Processing...
                         </>
                       ) : (
-                        <>チームライセンス {formatPrice(skill.team_price)}</>
+                        <>Team License {formatPrice(skill.team_price)}</>
                       )}
                     </button>
                   )}
@@ -407,10 +407,10 @@ export function SkillDetailPage() {
                       {purchasing === 'enterprise' ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          処理中...
+                          Processing...
                         </>
                       ) : (
-                        <>企業ライセンス {formatPrice(skill.enterprise_price)}</>
+                        <>Enterprise License {formatPrice(skill.enterprise_price)}</>
                       )}
                     </button>
                   )}
@@ -419,26 +419,26 @@ export function SkillDetailPage() {
                 <ul className="mt-6 space-y-3 text-sm text-gray-600">
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-500" />
-                    ワンクリックインストール
+                    One-click install
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-500" />
-                    無期限アップデート
+                    Lifetime updates
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-500" />
-                    7日間返金保証
+                    7-day money-back guarantee
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-500" />
-                    法人請求書対応
+                    Enterprise invoicing available
                   </li>
                 </ul>
               </div>
 
               {/* Seller Info */}
               <div className="bg-white rounded-xl border p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">出品者</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Seller</h3>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
                     <span className="text-gray-600 font-medium text-lg">
@@ -448,7 +448,7 @@ export function SkillDetailPage() {
                   <div>
                     <Link
                       to={`/sellers/${skill.seller_id}`}
-                      className="font-medium text-gray-900 hover:text-purple-600"
+                      className="font-medium text-gray-900 hover:text-red-600"
                     >
                       {skill.seller?.display_name}
                     </Link>
@@ -474,30 +474,30 @@ export function SkillDetailPage() {
 
               {/* Version Info */}
               <div className="bg-white rounded-xl border p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">バージョン情報</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Version Info</h3>
                 <dl className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <dt className="text-gray-500">バージョン</dt>
+                    <dt className="text-gray-500">Version</dt>
                     <dd className="text-gray-900">v{skill.version}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-gray-500">最終更新</dt>
+                    <dt className="text-gray-500">Last Updated</dt>
                     <dd className="text-gray-900">
-                      {new Date(skill.updated_at).toLocaleDateString('ja-JP')}
+                      {new Date(skill.updated_at).toLocaleDateString('en-US')}
                     </dd>
                   </div>
                   {skill.claude_code_version_min && (
                     <div className="flex justify-between">
-                      <dt className="text-gray-500">対応バージョン</dt>
+                      <dt className="text-gray-500">Compatible Version</dt>
                       <dd className="text-gray-900">
-                        {skill.claude_code_version_min}〜
+                        {skill.claude_code_version_min}+
                       </dd>
                     </div>
                   )}
                 </dl>
-                <button className="flex items-center gap-2 mt-4 text-sm text-purple-600 hover:text-purple-700">
+                <button className="flex items-center gap-2 mt-4 text-sm text-red-600 hover:text-red-700">
                   <RefreshCw className="w-4 h-4" />
-                  更新履歴を見る
+                  View Changelog
                 </button>
               </div>
             </div>

@@ -9,10 +9,10 @@ interface SkillCardProps {
 
 export function SkillCard({ skill, showSeller = true }: SkillCardProps) {
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ja-JP', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'JPY',
-    }).format(price);
+      currency: 'USD',
+    }).format(price / 100);
   };
 
   return (
@@ -21,7 +21,7 @@ export function SkillCard({ skill, showSeller = true }: SkillCardProps) {
       className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
     >
       {/* Demo Image */}
-      <div className="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 relative overflow-hidden">
+      <div className="aspect-video bg-gradient-to-br from-red-100 to-orange-100 relative overflow-hidden">
         {skill.demo_images?.[0] ? (
           <img
             src={skill.demo_images[0]}
@@ -30,14 +30,14 @@ export function SkillCard({ skill, showSeller = true }: SkillCardProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="text-4xl font-bold text-purple-300">
+            <span className="text-4xl font-bold text-red-300">
               {skill.title.charAt(0)}
             </span>
           </div>
         )}
         {skill.is_featured && (
           <span className="absolute top-2 left-2 px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded">
-            注目
+            Featured
           </span>
         )}
         <button
@@ -53,7 +53,7 @@ export function SkillCard({ skill, showSeller = true }: SkillCardProps) {
 
       {/* Content */}
       <div className="p-4">
-        <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors line-clamp-1">
+        <h3 className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-1">
           {skill.title}
         </h3>
         <p className="text-sm text-gray-500 mt-1 line-clamp-2">
@@ -86,8 +86,8 @@ export function SkillCard({ skill, showSeller = true }: SkillCardProps) {
               {skill.download_count}
             </span>
           </div>
-          <span className="font-bold text-purple-600">
-            {skill.price === 0 ? '無料' : formatPrice(skill.price)}
+          <span className="font-bold text-red-600">
+            {skill.price === 0 ? 'Free' : formatPrice(skill.price)}
           </span>
         </div>
 

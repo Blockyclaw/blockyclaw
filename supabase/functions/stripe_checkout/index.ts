@@ -88,10 +88,10 @@ serve(async (req) => {
       line_items: [
         {
           price_data: {
-            currency: "jpy",
+            currency: "usd",
             product_data: {
               name: skill.title,
-              description: `${license_type === "personal" ? "個人" : license_type === "team" ? "チーム" : "企業"}ライセンス`,
+              description: `${license_type === "personal" ? "Personal" : license_type === "team" ? "Team" : "Enterprise"} License`,
             },
             unit_amount: price,
           },
