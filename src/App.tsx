@@ -9,6 +9,7 @@ import { SellerDashboardPage } from './pages/SellerDashboardPage';
 import { BuyerDashboardPage } from './pages/BuyerDashboardPage';
 import { AgentDashboardPage } from './pages/AgentDashboardPage';
 import { ClaimAgentPage } from './pages/ClaimAgentPage';
+import { TokenPage } from './pages/TokenPage';
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -34,6 +35,14 @@ function App() {
           element={
             <Layout>
               <HomePage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/token"
+          element={
+            <Layout>
+              <TokenPage />
             </Layout>
           }
         />

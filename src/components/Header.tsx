@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Bot, Menu, X } from 'lucide-react';
+import { Bot, Menu, X, Coins } from 'lucide-react';
 import { useState } from 'react';
 
 export function Header() {
@@ -20,7 +20,11 @@ export function Header() {
             <Link to="/skills" className="text-gray-600 hover:text-black transition">
               Skills
             </Link>
-            <Link to="/dashboard/agents" className="flex items-center gap-2 text-red-600 hover:text-red-700 transition font-medium">
+            <Link to="/token" className="flex items-center gap-2 text-red-600 hover:text-red-700 transition font-medium">
+              <Coins className="w-4 h-4" />
+              $CLAW
+            </Link>
+            <Link to="/dashboard/agents" className="flex items-center gap-2 text-gray-600 hover:text-black transition">
               <Bot className="w-4 h-4" />
               AI Agents
             </Link>
@@ -63,8 +67,16 @@ export function Header() {
                 Skills
               </Link>
               <Link
-                to="/dashboard/agents"
+                to="/token"
                 className="flex items-center gap-2 text-red-600 py-2 font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Coins className="w-4 h-4" />
+                $CLAW Token
+              </Link>
+              <Link
+                to="/dashboard/agents"
+                className="flex items-center gap-2 text-gray-600 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Bot className="w-4 h-4" />
