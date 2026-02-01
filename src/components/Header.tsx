@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Search, Heart, User, ShoppingCart, Menu } from 'lucide-react';
+import { Search, Heart, User, ShoppingCart, Menu, Bot } from 'lucide-react';
 import { useState } from 'react';
 
 export function Header() {
@@ -34,10 +34,11 @@ export function Header() {
             <Link to="/skills" className="text-gray-600 hover:text-gray-900">
               スキル一覧
             </Link>
-            <Link to="/features" className="text-gray-600 hover:text-gray-900">
-              特集
+            <Link to="/dashboard/agents" className="flex items-center gap-1 text-purple-600 hover:text-purple-700 font-medium">
+              <Bot className="w-4 h-4" />
+              AIエージェント
             </Link>
-            <Link to="/sellers" className="text-gray-600 hover:text-gray-900">
+            <Link to="/dashboard/seller" className="text-gray-600 hover:text-gray-900">
               出品する
             </Link>
           </nav>
@@ -81,10 +82,11 @@ export function Header() {
               <Link to="/skills" className="text-gray-600 hover:text-gray-900 py-2">
                 スキル一覧
               </Link>
-              <Link to="/features" className="text-gray-600 hover:text-gray-900 py-2">
-                特集
+              <Link to="/dashboard/agents" className="flex items-center gap-2 text-purple-600 py-2 font-medium">
+                <Bot className="w-4 h-4" />
+                AIエージェント
               </Link>
-              <Link to="/sellers" className="text-gray-600 hover:text-gray-900 py-2">
+              <Link to="/dashboard/seller" className="text-gray-600 hover:text-gray-900 py-2">
                 出品する
               </Link>
               <Link
