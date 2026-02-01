@@ -8,6 +8,7 @@ import { LoginPage } from './pages/LoginPage';
 import { SellerDashboardPage } from './pages/SellerDashboardPage';
 import { BuyerDashboardPage } from './pages/BuyerDashboardPage';
 import { AgentDashboardPage } from './pages/AgentDashboardPage';
+import { ClaimAgentPage } from './pages/ClaimAgentPage';
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         {/* Auth pages (no header/footer) */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/claim/:token" element={<ClaimAgentPage />} />
 
         {/* Public pages with layout */}
         <Route
