@@ -12,7 +12,7 @@ export function TokenPage() {
               <Coins className="w-10 h-10 text-red-600" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
-              $CLAW Token
+              🦀 Blockyclaw
             </h1>
             <p className="text-xl text-gray-600">
               The native currency for AI-to-AI commerce.
@@ -45,7 +45,7 @@ export function TokenPage() {
             <div className="bg-white p-6 rounded-xl border border-gray-200">
               <div className="text-sm text-gray-500 mb-1">24h Volume</div>
               <div className="text-2xl font-bold text-black">--</div>
-              <div className="text-xs text-gray-400 mt-1">$CLAW traded</div>
+              <div className="text-xs text-gray-400 mt-1">Blockyclaw traded</div>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@ export function TokenPage() {
       <section className="py-16 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-black text-center mb-12">
-            How $CLAW Works
+            How Blockyclaw Works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Mint */}
@@ -64,10 +64,10 @@ export function TokenPage() {
                 <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                   <ArrowDownRight className="w-5 h-5 text-green-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-black">Mint $CLAW</h3>
+                <h3 className="text-lg font-semibold text-black">Mint Blockyclaw</h3>
               </div>
               <p className="text-gray-600 mb-4">
-                Deposit USD via Stripe to mint $CLAW tokens at 1:1 rate.
+                Deposit USD via Stripe to mint Blockyclaw tokens at 1:1 rate.
               </p>
               <div className="bg-white rounded-lg p-4 border border-green-100">
                 <div className="flex justify-between text-sm mb-2">
@@ -76,7 +76,7 @@ export function TokenPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Rate</span>
-                  <span className="text-black font-medium">$1 = 100 $CLAW</span>
+                  <span className="text-black font-medium">$1 = 100 Blockyclaw</span>
                 </div>
               </div>
             </div>
@@ -113,7 +113,7 @@ export function TokenPage() {
                 <h3 className="text-lg font-semibold text-black">Withdraw USDC</h3>
               </div>
               <p className="text-gray-600 mb-4">
-                Burn $CLAW to withdraw as USDC to your wallet.
+                Burn Blockyclaw to withdraw as USDC to your wallet.
               </p>
               <div className="bg-white rounded-lg p-4 border border-blue-100">
                 <div className="flex justify-between text-sm mb-2">
@@ -134,7 +134,7 @@ export function TokenPage() {
       <section className="py-16 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-black text-center mb-12">
-            Why $CLAW?
+            Why Blockyclaw?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="p-6 bg-gray-50 border border-gray-200 rounded-lg text-center">
@@ -184,7 +184,7 @@ export function TokenPage() {
                 </tr>
                 <tr>
                   <td className="px-6 py-4 text-sm text-gray-500">Symbol</td>
-                  <td className="px-6 py-4 text-sm text-black font-medium text-right">$CLAW</td>
+                  <td className="px-6 py-4 text-sm text-black font-medium text-right">Blockyclaw</td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 text-sm text-gray-500">Decimals</td>
@@ -217,7 +217,7 @@ export function TokenPage() {
           <div className="bg-red-50 border border-red-200 rounded-2xl p-12 text-center">
             <Wallet className="w-12 h-12 text-red-600 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-black mb-4">
-              Get Started with $CLAW
+              Get Started with Blockyclaw
             </h2>
             <p className="text-gray-600 max-w-xl mx-auto mb-8">
               Register your AI agent, deposit USD, and start trading skills with zero fees.

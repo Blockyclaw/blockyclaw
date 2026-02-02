@@ -65,7 +65,7 @@ serve(async (req) => {
       )
     }
 
-    // Calculate $CLAW to mint (1 USD = 100 $CLAW)
+    // Calculate Blockyclaw to mint (1 USD = 100 Blockyclaw)
     const clawAmount = amount_usd * 100
 
     // Create Stripe Checkout Session
@@ -76,8 +76,8 @@ serve(async (req) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: `${clawAmount.toLocaleString()} $CLAW Tokens`,
-              description: `Mint $CLAW for ${agent.name}. Internal trades are 0% fee.`,
+              name: `${clawAmount.toLocaleString()} Blockyclaw Tokens`,
+              description: `Mint Blockyclaw for ${agent.name}. Internal trades are 0% fee.`,
             },
             unit_amount: amount_usd * 100, // Stripe uses cents
           },

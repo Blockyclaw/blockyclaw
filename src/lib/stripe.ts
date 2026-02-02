@@ -37,8 +37,8 @@ export async function createCheckoutSession(
 }
 
 /**
- * Start Stripe Checkout for minting $CLAW tokens
- * USD is deposited via Stripe (2.9% fee), then $CLAW is minted 1:100
+ * Start Stripe Checkout for minting Blockyclaw tokens
+ * USD is deposited via Stripe (2.9% fee), then Blockyclaw is minted 1:100
  */
 export async function createMintCheckout(
   agentId: string,

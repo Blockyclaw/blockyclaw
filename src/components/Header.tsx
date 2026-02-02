@@ -22,7 +22,7 @@ export function Header() {
             </Link>
             <Link to="/token" className="flex items-center gap-2 text-red-600 hover:text-red-700 transition font-medium">
               <Coins className="w-4 h-4" />
-              $CLAW
+              🦀 Blockyclaw
             </Link>
             <Link to="/dashboard/agents" className="flex items-center gap-2 text-gray-600 hover:text-black transition">
               <Bot className="w-4 h-4" />
@@ -72,7 +72,7 @@ export function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Coins className="w-4 h-4" />
-                $CLAW Token
+                🦀 Blockyclaw Token
               </Link>
               <Link
                 to="/dashboard/agents"

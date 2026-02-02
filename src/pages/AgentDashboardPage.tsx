@@ -88,7 +88,7 @@ export function AgentDashboardPage() {
   const [mintError, setMintError] = useState<string | null>(null);
 
   const formatClaw = (amount: number) => {
-    return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
+    return `${new Intl.NumberFormat('en-US').format(amount)} 🦀`;
   };
 
   const handleCreateAgent = async () => {
@@ -190,7 +190,7 @@ export function AgentDashboardPage() {
               AI Agent Management
             </h1>
             <p className="text-gray-500 mt-1">
-              Fund AI agents with $CLAW and let them trade skills with 0% fees
+              Fund AI agents with 🦀 Blockyclaw and let them trade skills with 0% fees
             </p>
           </div>
           <button
@@ -292,7 +292,7 @@ export function AgentDashboardPage() {
                 <div>
                   <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
                     <Coins className="w-3 h-3 text-red-500" />
-                    $CLAW Balance
+                    🦀 Balance
                   </p>
                   <p className="text-lg font-bold text-red-600">
                     {formatClaw(agent.balance)}
@@ -403,7 +403,7 @@ export function AgentDashboardPage() {
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                 >
                   <Coins className="w-4 h-4" />
-                  Mint $CLAW
+                  Mint 🦀
                 </button>
                 <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition">
                   <ShoppingCart className="w-4 h-4" />
@@ -499,7 +499,7 @@ curl -X GET "https://api.blockyclaw.io/ai/items/owned/{item_id}/content" \\
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Monthly Budget ($CLAW)
+                      Monthly Budget (🦀)
                     </label>
                     <input
                       type="number"
@@ -523,7 +523,7 @@ curl -X GET "https://api.blockyclaw.io/ai/items/owned/{item_id}/content" \\
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Require Approval Above ($CLAW)
+                    Require Approval Above (🦀)
                   </label>
                   <input
                     type="number"
@@ -633,14 +633,14 @@ curl -H "x-api-key: $BLOCKYCLAW_API_KEY" \\
         </div>
       )}
 
-      {/* Mint $CLAW Modal */}
+      {/* Mint Blockyclaw Modal */}
       {showMintModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-md w-full">
             <div className="p-6 border-b flex items-center justify-between">
               <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Wallet className="w-6 h-6 text-red-600" />
-                Mint $CLAW Tokens
+                Mint 🦀 Blockyclaw
               </h2>
               <button
                 onClick={() => setShowMintModal(false)}
@@ -652,8 +652,8 @@ curl -H "x-api-key: $BLOCKYCLAW_API_KEY" \\
 
             <div className="p-6 space-y-6">
               <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
-                <p>Pay USD via Stripe to mint $CLAW tokens.</p>
-                <p className="mt-1">Rate: $1 USD = 100 $CLAW (2.9% Stripe fee)</p>
+                <p>Pay USD via Stripe to mint 🦀 tokens.</p>
+                <p className="mt-1">Rate: $1 USD = 100 🦀 (2.9% Stripe fee)</p>
               </div>
 
               {/* Quick Amount Selection */}
@@ -700,7 +700,7 @@ curl -H "x-api-key: $BLOCKYCLAW_API_KEY" \\
                 <div className="flex justify-between pt-2 border-t border-gray-700">
                   <span className="text-gray-300">You Receive</span>
                   <span className="font-bold text-green-400">
-                    {(mintAmount * 100).toLocaleString()} $CLAW
+                    {(mintAmount * 100).toLocaleString()} 🦀
                   </span>
                 </div>
               </div>
@@ -724,7 +724,7 @@ curl -H "x-api-key: $BLOCKYCLAW_API_KEY" \\
                 ) : (
                   <>
                     <Coins className="w-5 h-5" />
-                    Mint {(mintAmount * 100).toLocaleString()} $CLAW
+                    Mint {(mintAmount * 100).toLocaleString()} 🦀
                   </>
                 )}
               </button>

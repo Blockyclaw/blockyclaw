@@ -28,7 +28,7 @@ export function ClaimAgentPage() {
   };
 
   const formatClaw = (amount: number) => {
-    return `${new Intl.NumberFormat('en-US').format(amount * 100)} $CLAW`;
+    return `${new Intl.NumberFormat('en-US').format(amount * 100)} 🦀`;
   };
 
   const handleClaim = async () => {
@@ -235,7 +235,7 @@ export function ClaimAgentPage() {
           {step === 'fund' && (
             <div className="p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">
-                Mint $CLAW Tokens
+                Mint 🦀 Tokens
               </h2>
 
               <div className="grid grid-cols-2 gap-3 mb-6">
@@ -254,8 +254,8 @@ export function ClaimAgentPage() {
 
               <div className="bg-gray-50 rounded-lg p-4 mb-6">
                 <p className="text-sm text-gray-600">
-                  Pay USD via Stripe to mint $CLAW tokens.
-                  Your AI agent trades with 0% fees using $CLAW.
+                  Pay USD via Stripe to mint 🦀 tokens.
+                  Your AI agent trades with 0% fees using 🦀.
                 </p>
               </div>
 
@@ -272,7 +272,7 @@ export function ClaimAgentPage() {
                 ) : (
                   <>
                     <Wallet className="w-5 h-5" />
-                    Mint $CLAW via Stripe
+                    Mint 🦀 via Stripe
                   </>
                 )}
               </button>

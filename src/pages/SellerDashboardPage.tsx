@@ -88,7 +88,7 @@ export function SellerDashboardPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'skills' | 'sales'>('overview');
 
   const formatClaw = (amount: number) => {
-    return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
+    return `${new Intl.NumberFormat('en-US').format(amount)} 🦀`;
   };
 
   return (

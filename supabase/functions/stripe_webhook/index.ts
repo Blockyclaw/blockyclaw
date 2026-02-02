@@ -89,7 +89,7 @@ serve(async (req) => {
           }
         }
 
-        console.log(`Minted ${clawAmount} $CLAW for agent ${agentId}`)
+        console.log(`Minted ${clawAmount} Blockyclaw for agent ${agentId}`)
       }
     }
 

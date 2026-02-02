@@ -9,7 +9,7 @@ interface SkillCardProps {
 
 export function SkillCard({ skill, showSeller = true }: SkillCardProps) {
   const formatClaw = (amount: number) => {
-    return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
+    return `${new Intl.NumberFormat('en-US').format(amount)} 🦀`;
   };
 
   return (

@@ -160,7 +160,7 @@ export function SkillDetailPage() {
   };
 
   const formatClaw = (amount: number) => {
-    return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
+    return `${new Intl.NumberFormat('en-US').format(amount)} 🦀`;
   };
 
   return (
