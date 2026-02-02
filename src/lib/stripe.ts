@@ -37,6 +37,41 @@ export async function createCheckoutSession(
 }
 
 /**
+ * Start Stripe Checkout for minting $CLAW tokens
+ * USD is deposited via Stripe (2.9% fee), then $CLAW is minted 1:100
+ */
+export async function createMintCheckout(
+  agentId: string,
+  amountUsd: number
+): Promise<{ url: string } | { error: string }> {
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    return { error: 'Login required' };
+  }
+
+  const response = await fetch(`${SUPABASE_URL}/functions/v1/stripe_mint_claw`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({
+      agent_id: agentId,
+      amount_usd: amountUsd,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    return { error: data.error || 'Failed to start checkout' };
+  }
+
+  return { url: data.url };
+}
+
+/**
  * Start Stripe Connect onboarding for sellers
  */
 export async function startStripeOnboarding(): Promise<{ url: string } | { error: string }> {

@@ -1,137 +1,107 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+import Stripe from "https://esm.sh/stripe@13.10.0?target=deno"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, stripe-signature",
-};
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, stripe-signature",
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { headers: corsHeaders })
   }
 
   try {
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
       apiVersion: "2023-10-16",
-    });
+    })
 
-    const supabaseAdmin = createClient(
+    const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
+    )
 
-    const signature = req.headers.get("stripe-signature");
-    const body = await req.text();
-    const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
-
-    let event: Stripe.Event;
-
-    if (webhookSecret && signature) {
-      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-    } else {
-      // For testing without webhook signature verification
-      event = JSON.parse(body);
+    const signature = req.headers.get("stripe-signature")
+    if (!signature) {
+      return new Response(
+        JSON.stringify({ error: "Missing stripe signature" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      )
     }
 
-    console.log(`Processing event: ${event.type}`);
+    const body = await req.text()
+    const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET")!
 
-    switch (event.type) {
-      case "checkout.session.completed": {
-        const session = event.data.object as Stripe.Checkout.Session;
+    let event: Stripe.Event
+    try {
+      event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+    } catch (err) {
+      console.error("Webhook signature verification failed:", err.message)
+      return new Response(
+        JSON.stringify({ error: "Invalid signature" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      )
+    }
 
-        if (session.payment_status === "paid") {
-          const metadata = session.metadata || {};
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session
+      const metadata = session.metadata
 
-          // Handle wallet funding
-          if (metadata.type === "wallet_fund") {
-            const { agent_id, net_amount } = metadata;
-            const netAmountCents = parseInt(net_amount);
+      if (metadata?.type === "claw_mint") {
+        const agentId = metadata.agent_id
+        const clawAmount = parseInt(metadata.claw_amount)
+        const userId = metadata.user_id
 
-            if (agent_id && netAmountCents) {
-              // Process deposit with calculated net amount
-              const { data: result, error } = await supabaseAdmin.rpc("process_deposit", {
-                p_agent_id: agent_id,
-                p_amount_cents: parseInt(metadata.gross_amount), // Pass gross, function calculates fee
-                p_payment_method: "stripe",
-              });
+        await supabase.from("token_events").insert({
+          user_id: userId,
+          agent_id: agentId,
+          event_type: "mint",
+          amount: clawAmount,
+          fee_amount: 0,
+          stripe_session_id: session.id,
+          metadata: {
+            usd_amount: session.amount_total ? session.amount_total / 100 : 0,
+            payment_intent: session.payment_intent,
+          },
+        })
 
-              if (error) {
-                console.error("Failed to process wallet deposit:", error);
-                throw error;
-              }
+        // Use RPC to atomically increment balance
+        const { error: updateError } = await supabase.rpc("increment_agent_balance", {
+          p_agent_id: agentId,
+          p_amount: clawAmount,
+        })
 
-              console.log(`Wallet funded for agent ${agent_id}: +$${(netAmountCents / 100).toFixed(2)}`);
-            }
-          }
-          // Handle skill purchase
-          else if (metadata.skill_id && metadata.buyer_id) {
-            const { skill_id, buyer_id, license_type } = metadata;
+        if (updateError) {
+          console.error("Failed to update balance:", updateError)
+          // Fallback: direct update (not atomic but works)
+          const { data: agent } = await supabase
+            .from("ai_agents")
+            .select("balance")
+            .eq("id", agentId)
+            .single()
 
-            // Record the purchase
-            const { error } = await supabaseAdmin.from("purchases").insert({
-              buyer_id,
-              skill_id,
-              license_type,
-              price_paid: session.amount_total,
-              stripe_payment_intent_id: session.payment_intent as string,
-              status: "completed",
-            });
-
-            if (error) {
-              console.error("Failed to record purchase:", error);
-              throw error;
-            }
-
-            // Increment download count
-            await supabaseAdmin.rpc("increment_download_count", {
-              p_skill_id: skill_id,
-            });
-
-            console.log(`Purchase recorded for skill ${skill_id} by user ${buyer_id}`);
-          }
-        }
-        break;
-      }
-
-      case "payment_intent.payment_failed": {
-        const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        console.log(`Payment failed: ${paymentIntent.id}`);
-        break;
-      }
-
-      case "account.updated": {
-        // Connected account updated (e.g., onboarding completed)
-        const account = event.data.object as Stripe.Account;
-
-        if (account.details_submitted && account.charges_enabled) {
-          // Update user's is_seller status
-          const { error } = await supabaseAdmin
-            .from("users")
-            .update({ is_seller: true })
-            .eq("stripe_account_id", account.id);
-
-          if (error) {
-            console.error("Failed to update seller status:", error);
-          } else {
-            console.log(`Seller status activated for account ${account.id}`);
+          if (agent) {
+            await supabase
+              .from("ai_agents")
+              .update({ balance: agent.balance + clawAmount })
+              .eq("id", agentId)
           }
         }
-        break;
+
+        console.log(`Minted ${clawAmount} $CLAW for agent ${agentId}`)
       }
     }
 
     return new Response(
       JSON.stringify({ received: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    )
   } catch (error) {
-    console.error("Webhook error:", error);
+    console.error("Webhook error:", error)
     return new Response(
       JSON.stringify({ error: error.message }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    )
   }
-});
+})

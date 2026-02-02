@@ -15,7 +15,9 @@ import {
   Coins,
   X,
   Loader2,
+  Wallet,
 } from 'lucide-react';
+import { createMintCheckout } from '../lib/stripe';
 
 interface AIAgent {
   id: string;
@@ -79,6 +81,11 @@ export function AgentDashboardPage() {
     requireApprovalAbove: 10000,
   });
   const [createdAgent, setCreatedAgent] = useState<{ api_key: string; claim_url: string } | null>(null);
+  const [showMintModal, setShowMintModal] = useState(false);
+  const [mintAgentId, setMintAgentId] = useState<string | null>(null);
+  const [mintAmount, setMintAmount] = useState(100);
+  const [minting, setMinting] = useState(false);
+  const [mintError, setMintError] = useState<string | null>(null);
 
   const formatClaw = (amount: number) => {
     return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
@@ -146,6 +153,30 @@ export function AgentDashboardPage() {
       newVisible.add(agentId);
     }
     setVisibleKeys(newVisible);
+  };
+
+  const handleOpenMintModal = (agentId: string) => {
+    setMintAgentId(agentId);
+    setMintAmount(100);
+    setMintError(null);
+    setShowMintModal(true);
+  };
+
+  const handleMint = async () => {
+    if (!mintAgentId || mintAmount < 10) return;
+    setMinting(true);
+    setMintError(null);
+
+    const result = await createMintCheckout(mintAgentId, mintAmount);
+
+    if ('error' in result) {
+      setMintError(result.error);
+      setMinting(false);
+      return;
+    }
+
+    // Redirect to Stripe Checkout
+    window.location.href = result.url;
   };
 
   return (
@@ -367,7 +398,10 @@ export function AgentDashboardPage() {
 
               {/* Actions */}
               <div className="px-6 py-4 bg-gray-50 border-t flex gap-2">
-                <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                <button
+                  onClick={() => handleOpenMintModal(agent.id)}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                >
                   <Coins className="w-4 h-4" />
                   Mint $CLAW
                 </button>
@@ -595,6 +629,110 @@ curl -H "x-api-key: $BLOCKYCLAW_API_KEY" \\
                 </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Mint $CLAW Modal */}
+      {showMintModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full">
+            <div className="p-6 border-b flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Wallet className="w-6 h-6 text-red-600" />
+                Mint $CLAW Tokens
+              </h2>
+              <button
+                onClick={() => setShowMintModal(false)}
+                className="p-2 text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
+                <p>Pay USD via Stripe to mint $CLAW tokens.</p>
+                <p className="mt-1">Rate: $1 USD = 100 $CLAW (2.9% Stripe fee)</p>
+              </div>
+
+              {/* Quick Amount Selection */}
+              <div className="grid grid-cols-4 gap-2">
+                {[50, 100, 500, 1000].map((amount) => (
+                  <button
+                    key={amount}
+                    onClick={() => setMintAmount(amount)}
+                    className={`py-3 rounded-lg border-2 transition font-medium ${
+                      mintAmount === amount
+                        ? 'border-red-500 bg-red-50 text-red-700'
+                        : 'border-gray-200 hover:border-gray-300 text-gray-700'
+                    }`}
+                  >
+                    ${amount}
+                  </button>
+                ))}
+              </div>
+
+              {/* Custom Amount */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Custom Amount (USD)
+                </label>
+                <input
+                  type="number"
+                  min="10"
+                  value={mintAmount}
+                  onChange={(e) => setMintAmount(parseInt(e.target.value) || 0)}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                />
+              </div>
+
+              {/* Summary */}
+              <div className="bg-gray-900 rounded-lg p-4 text-white">
+                <div className="flex justify-between mb-2">
+                  <span className="text-gray-400">You Pay</span>
+                  <span className="font-semibold">${mintAmount.toLocaleString()} USD</span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span className="text-gray-400">Stripe Fee (2.9%)</span>
+                  <span className="text-gray-400">-${(mintAmount * 0.029).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between pt-2 border-t border-gray-700">
+                  <span className="text-gray-300">You Receive</span>
+                  <span className="font-bold text-green-400">
+                    {(mintAmount * 100).toLocaleString()} $CLAW
+                  </span>
+                </div>
+              </div>
+
+              {mintError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+                  {mintError}
+                </div>
+              )}
+
+              <button
+                onClick={handleMint}
+                disabled={minting || mintAmount < 10}
+                className="w-full py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {minting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Redirecting to Stripe...
+                  </>
+                ) : (
+                  <>
+                    <Coins className="w-5 h-5" />
+                    Mint {(mintAmount * 100).toLocaleString()} $CLAW
+                  </>
+                )}
+              </button>
+
+              <p className="text-xs text-gray-500 text-center">
+                Secure payment powered by Stripe. Internal trades are 0% fee.
+              </p>
+            </div>
           </div>
         </div>
       )}
