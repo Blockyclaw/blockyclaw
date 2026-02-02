@@ -13,6 +13,8 @@ import {
   TrendingUp,
   Package,
   Coins,
+  X,
+  Loader2,
 } from 'lucide-react';
 
 interface AIAgent {
@@ -64,13 +66,70 @@ const mockPendingRequests = [
 ];
 
 export function AgentDashboardPage() {
-  const [agents] = useState<AIAgent[]>(mockAgents);
-  const [_showCreateModal, setShowCreateModal] = useState(false);
+  const [agents, setAgents] = useState<AIAgent[]>(mockAgents);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [visibleKeys, setVisibleKeys] = useState<Set<string>>(new Set());
+  const [creating, setCreating] = useState(false);
+  const [newAgent, setNewAgent] = useState({
+    name: '',
+    description: '',
+    monthlyBudget: 10000,
+    perPurchaseLimit: 5000,
+    requireApprovalAbove: 10000,
+  });
+  const [createdAgent, setCreatedAgent] = useState<{ api_key: string; claim_url: string } | null>(null);
 
   const formatClaw = (amount: number) => {
     return `${new Intl.NumberFormat('en-US').format(amount)} $CLAW`;
+  };
+
+  const handleCreateAgent = async () => {
+    if (!newAgent.name) return;
+    setCreating(true);
+
+    // TODO: Call Supabase Edge Function to create agent
+    // For now, simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    const generatedKey = `sk_agent_${Math.random().toString(36).slice(2, 18)}`;
+    const claimToken = Math.random().toString(36).slice(2, 10);
+
+    const agent: AIAgent = {
+      id: Math.random().toString(36).slice(2),
+      name: newAgent.name,
+      description: newAgent.description,
+      api_key: generatedKey,
+      balance: 0,
+      lifetime_spent: 0,
+      total_purchases: 0,
+      monthly_budget: newAgent.monthlyBudget,
+      per_purchase_limit: newAgent.perPurchaseLimit,
+      require_approval_above: newAgent.requireApprovalAbove,
+      auto_purchase_enabled: true,
+      is_active: false,
+      last_active_at: null,
+      created_at: new Date().toISOString(),
+    };
+
+    setAgents([...agents, agent]);
+    setCreatedAgent({
+      api_key: generatedKey,
+      claim_url: `${window.location.origin}/claim/${claimToken}`,
+    });
+    setCreating(false);
+  };
+
+  const handleCloseModal = () => {
+    setShowCreateModal(false);
+    setCreatedAgent(null);
+    setNewAgent({
+      name: '',
+      description: '',
+      monthlyBudget: 10000,
+      perPurchaseLimit: 5000,
+      requireApprovalAbove: 10000,
+    });
   };
 
   const copyApiKey = (key: string) => {
@@ -357,6 +416,188 @@ curl -X GET "https://api.blockyclaw.io/ai/items/owned/{item_id}/content" \\
           </pre>
         </div>
       </div>
+
+      {/* Create Agent Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Bot className="w-6 h-6 text-red-600" />
+                {createdAgent ? 'Agent Created!' : 'Create New AI Agent'}
+              </h2>
+              <button
+                onClick={handleCloseModal}
+                className="p-2 text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {!createdAgent ? (
+              <div className="p-6 space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Agent Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={newAgent.name}
+                    onChange={(e) => setNewAgent({ ...newAgent, name: e.target.value })}
+                    placeholder="e.g. Claude Assistant"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    value={newAgent.description}
+                    onChange={(e) => setNewAgent({ ...newAgent, description: e.target.value })}
+                    placeholder="What will this AI agent do?"
+                    rows={3}
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Monthly Budget ($CLAW)
+                    </label>
+                    <input
+                      type="number"
+                      value={newAgent.monthlyBudget}
+                      onChange={(e) => setNewAgent({ ...newAgent, monthlyBudget: parseInt(e.target.value) || 0 })}
+                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Per Purchase Limit
+                    </label>
+                    <input
+                      type="number"
+                      value={newAgent.perPurchaseLimit}
+                      onChange={(e) => setNewAgent({ ...newAgent, perPurchaseLimit: parseInt(e.target.value) || 0 })}
+                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Require Approval Above ($CLAW)
+                  </label>
+                  <input
+                    type="number"
+                    value={newAgent.requireApprovalAbove}
+                    onChange={(e) => setNewAgent({ ...newAgent, requireApprovalAbove: parseInt(e.target.value) || 0 })}
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Purchases above this amount will require your approval
+                  </p>
+                </div>
+
+                <button
+                  onClick={handleCreateAgent}
+                  disabled={!newAgent.name || creating}
+                  className="w-full py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {creating ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Creating Agent...
+                    </>
+                  ) : (
+                    <>
+                      <Bot className="w-5 h-5" />
+                      Create Agent
+                    </>
+                  )}
+                </button>
+              </div>
+            ) : (
+              <div className="p-6 space-y-6">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <p className="text-green-800 font-medium">
+                    Agent created successfully!
+                  </p>
+                  <p className="text-green-600 text-sm mt-1">
+                    Save the API key below. It won't be shown again.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    API Key
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 px-4 py-3 bg-gray-900 text-green-400 rounded-lg text-sm font-mono break-all">
+                      {createdAgent.api_key}
+                    </code>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(createdAgent.api_key);
+                        setCopiedKey(createdAgent.api_key);
+                        setTimeout(() => setCopiedKey(null), 2000);
+                      }}
+                      className="p-3 bg-gray-100 rounded-lg hover:bg-gray-200"
+                    >
+                      {copiedKey === createdAgent.api_key ? (
+                        <Check className="w-5 h-5 text-green-500" />
+                      ) : (
+                        <Copy className="w-5 h-5 text-gray-600" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Claim URL (for AI to self-register)
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 px-4 py-3 bg-gray-100 rounded-lg text-sm font-mono break-all text-gray-700">
+                      {createdAgent.claim_url}
+                    </code>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(createdAgent.claim_url);
+                      }}
+                      className="p-3 bg-gray-100 rounded-lg hover:bg-gray-200"
+                    >
+                      <Copy className="w-5 h-5 text-gray-600" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-gray-900 rounded-lg p-4">
+                  <p className="text-gray-400 text-xs mb-2">Give this to your AI agent:</p>
+                  <pre className="text-sm text-green-400 overflow-x-auto">
+{`# Set your API key
+export BLOCKYCLAW_API_KEY="${createdAgent.api_key}"
+
+# Test connection
+curl -H "x-api-key: $BLOCKYCLAW_API_KEY" \\
+  https://api.blockyclaw.io/ai/me`}
+                  </pre>
+                </div>
+
+                <button
+                  onClick={handleCloseModal}
+                  className="w-full py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition"
+                >
+                  Done
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
